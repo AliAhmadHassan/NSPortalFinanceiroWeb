@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/fiori.xhtml">
+	<ui:define name="content">
+		<h:form prependId="false">
+			<c:if test="#{not empty menuPrincipalBean.menuGestaoUsuarioItens}">
+				<div class="ContainerTilhe">Gestão de Usuários</div>
+				<a name="GestaoUsuarios" class="anchor"/>
+
+				<div style="margin-left: 25px; margin-top: 5px;">
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuGestaoUsuarioItens}">
+						<h:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+							style="text-decoration: none">
+							<f:param name="urlMenu" value="#{item.url}" />
+
+							<div class="tilesContainer">
+								<div class="tilesTitle">
+									<b>#{item.titulo}</b>
+								</div>
+								<div class="tilesBody">
+									<div class="icone">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/#{item.imagem}"></img>
+									</div>
+									<div class="number"></div>
+								</div>
+							</div>
+						</h:commandLink>
+					</ui:repeat>
+				</div>
+			</c:if>
+
+
+			<c:if test="#{not empty menuPrincipalBean.menuGestaoFornecedorItens}">
+				<div class="ContainerTilhe">Gestão do Fornecedor</div>
+				<a name="GestaoFornecedor" class="anchor"/>
+				
+				<div style="margin-left: 25px; margin-top: 5px;">
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuGestaoFornecedorItens}">
+						<h:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+							style="text-decoration: none">
+							<f:param name="urlMenu" value="#{item.url}" />
+
+							<div class="tilesContainer">
+								<div class="tilesTitle">
+									<b>#{item.titulo}</b>
+								</div>
+								<div class="tilesBody">
+									<div class="icone">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/#{item.imagem}"></img>
+									</div>
+									<div class="number"></div>
+								</div>
+							</div>
+						</h:commandLink>
+					</ui:repeat>
+				</div>
+			</c:if>
+
+
+
+
+			<c:if
+				test="#{not empty menuPrincipalBean.menuAntecipacaoFinanceiraItens}">
+				<div class="ContainerTilhe">Antecipação Financeira</div>
+				<a name="AntecipacaoFinanceira" class="anchor"/>
+				<div style="margin-left: 25px; margin-top: 5px;">
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuAntecipacaoFinanceiraItens}">
+						<h:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+							style="text-decoration: none">
+							<f:param name="urlMenu" value="#{item.url}" />
+							<div class="tilesContainer">
+								<div class="tilesTitle">
+									<b>#{item.titulo}</b>
+								</div>
+								<div class="tilesBody">
+									<div class="icone">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/#{item.imagem}"></img>
+									</div>
+									<div class="number"></div>
+								</div>
+							</div>
+						</h:commandLink>
+					</ui:repeat>
+				</div>
+			</c:if>
+
+<c:if
+				test="#{not empty menuPrincipalBean.menuPublicacaoItens}">
+				<div class="ContainerTilhe">Publicação</div>
+				<a name="Publicacao" class="anchor"/>
+				<div style="margin-left: 25px; margin-top: 5px;">
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuPublicacaoItens}">
+						<h:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+							style="text-decoration: none">
+							<f:param name="urlMenu" value="#{item.url}" />
+							<div class="tilesContainer">
+								<div class="tilesTitle">
+									<b>#{item.titulo}</b>
+								</div>
+								<div class="tilesBody">
+									<div class="icone">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/#{item.imagem}"></img>
+									</div>
+									<div class="number"></div>
+								</div>
+							</div>
+						</h:commandLink>
+					</ui:repeat>
+				</div>
+			</c:if>
+
+			<c:if test="#{not empty menuPrincipalBean.menuComunicacaoItens}">
+				<div class="ContainerTilhe">Comunicação</div>
+				<a name="Comunicacao" class="anchor"/>
+
+				<div style="margin-left: 25px; margin-top: 5px;">
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuComunicacaoItens}">
+						<h:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+							style="text-decoration: none">
+							<f:param name="urlMenu" value="#{item.url}" />
+
+							<div class="tilesContainer">
+								<div class="tilesTitle">
+									<b>#{item.titulo}</b>
+								</div>
+								<div class="tilesBody">
+									<div class="icone">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/#{item.imagem}"></img>
+									</div>
+									<div class="number"></div>
+								</div>
+							</div>
+						</h:commandLink>
+					</ui:repeat>
+				</div>
+			</c:if>
+
+
+
+			<p:dialog id="dlgTermoAdiantamento" closeOnEscape="true"
+				widgetVar="dlgTermoAdiantamento" width="70%" modal="true"
+				resizable="false">
+				<div>
+					<h1 style="text-align: center;">Termo de Aceite – Antecipação
+						de Recebíveis</h1>
+
+					<p>O presente instrumento aplicável ao fornecedor da Grupo
+						Netshoes Brasil pessoa física ou jurídica tem como objetivo
+						alinhar os pontos abaixo entre as partes nos seguintes itens:</p>
+
+					<p>1. O fornecedor, após efetivar a solicitação da antecipação
+						de recebíveis, declara estar de acordo com as taxas e tarifas
+						cobradas pela Grupo Netshoes Brasil.</p>
+
+					<p style="padding-left: 20px">1.1. O fornecedor concorda que as
+						taxas e tarifas praticadas pela Grupo Netshoes Brasil não possuem
+						relação nenhuma com o mercado e seguem premissas estabelecidas
+						pela própria empresa;</p>
+
+					<p>2. O fornecedor declara que conhece a operação financeiras
+						de “Antecipação de Recebíveis”.</p>
+
+					<p>3. O fornecedor assume que todos os seus colaboradores com
+						acesso ao Portal de Antecipação de Recebíveis possuem poderes para
+						simular, solicitar e confirmar a operação de antecipação de
+						recebíveis.</p>
+
+					<p>4. O fornecedor declara ciência de que só poderão ser
+						solicitadas antecipações de notas fiscais que tiverem suas
+						mercadorias efetivamente entregues e/ou serviços devidamente
+						prestados ao Grupo Netshoes Brasil, respeitando o prazo de um dia
+						útil para a inclusão no sistema.</p>
+
+					<p>5. O fornecedor concorda que a Grupo Netshoes Brasil não tem
+						obrigação de antecipar todas as notas emitidas pelo fornecedor
+						conta a empresa, ficando à critério da companhia a seleção e
+						disponibilização das notas fiscais aptas para antecipação conforme
+						premissas da própria empresa.</p>
+
+					<p>6. O fornecedor declara que após confirmar a solicitação de
+						antecipação de recebível cancelará todos os boletos já emitidos
+						para pagamentos das notas antecipadas.</p>
+
+					<p>7. O fornecedor se compromete a não ceder os seus créditos
+						para quaisquer outras pessoas físicas e/ou jurídicas, incluindo
+						Bancos, Factorings etc, ficando o Grupo Netshoes Brasil
+						absolutamente isento de qualquer ônus gerado por eventual
+						antecipação de recebíveis efetuada pelo fornecedor, que não seja
+						com a própria empresa.</p>
+
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 50%; text-align: right"><div
+									class="sapMPanelBtn">
+									<p:commandButton value="#{msg.LabelConcordo}"
+										class="sapMBtnContent blue"
+										actionListener="#{menuPrincipalBean.termoContratoConcordo}"
+										oncomplete=":form:msgs" />
+
+								</div></td>
+							<td style="width: 50%"><div class="sapMPanelBtn">
+									<p:commandButton value="#{msg.LabelNaoConcordo}"
+										class="sapMBtnContent blue"
+										actionListener="#{menuPrincipalBean.termoContratoNaoConcordo}"
+										oncomplete=":form:msgs" />
+
+								</div></td>
+						</tr>
+					</table>
+
+				</div>
+
+			</p:dialog>
+
+			<div id="panelAviso" class="panelAvisos hidden-xs">
+				<c:forEach items="#{menuPrincipalBean.lstAvisos}" var="aviso">
+					<p:commandLink
+						actionListener="#{menuPrincipalBean.atualizaMensagemAviso}"
+						oncomplete="PF('dlgAvisos').show()" update="@form" style="text-decoration: none">
+						<f:param name="mensagemAviso" value="#{aviso.ID}" />
+						<div class="postit"
+							style="background: url('#{facesContext.externalContext.requestContextPath}/static/images/postit.png');         
+							background-size: 100% 100%;">
+							<h:outputText escape="false" value="#{aviso.titulo}"  />
+						</div>
+					</p:commandLink>
+				</c:forEach>
+			</div>
+
+			<p:dialog id="dlgAvisos" closeOnEscape="true" widgetVar="dlgAvisos"
+				modal="true" header="#{menuPrincipalBean.mensagemAviso.titulo}" dynamic="true"
+				
+				rendered="#{not empty menuPrincipalBean.lstAvisos}">
+				<p:ajax event="close" update="@form"
+					listener="#{menuPrincipalBean.atualizarAviso}" />
+				<h:outputText escape="false"
+					value="#{menuPrincipalBean.mensagemAviso.mensagem}" />
+				<br />
+				<br />
+				<table style="width: 100%">
+					<tr>
+						<td><h:selectBooleanCheckbox
+								value="#{menuPrincipalBean.naoExibirNovamente}" /> Não mostrar esta
+							mensagem.</td>
+						<td style="text-align: right;"><p:commandButton value="Fechar"
+								actionListener="#{menuPrincipalBean.atualizarAviso}" oncomplete="PF('dlgAvisos').hide()" /></td>
+					</tr>
+				</table>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+	<ui:define name="footer">
+	</ui:define>
+</ui:composition>
+</html>

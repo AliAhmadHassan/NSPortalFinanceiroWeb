@@ -1,0 +1,293 @@
+html {
+	clear: both;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	/*margin: 0px;
+	background-size: 100% auto;
+	-webkit-background-size: 100% auto;
+	background-attachment: scroll;
+	background-image: url(../images/login_background.jpg);
+	font-family: Arial,Helvetica,sans-serif;
+	*/
+	margin: 0px;
+	background: url(../images/login_background.jpg) no-repeat;
+	font-family: Arial, Helvetica, sans-serif;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: 100% 100%;
+}
+
+#header {
+	margin: 0px;
+	top: 0px;
+	margin-left: 0px;
+	width: 100%;
+	height: 88px;
+	background-image: url("../images/header_bg.png");
+	background-repeat: repeat-x;
+	z-index: 20;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 37px;
+	margin-bottom: 0px;
+	background-color: #efefef;
+	border: 1px solid #afafaf;
+	background-image: url("../images/footer_bg.png");
+	background-repeat: repeat-x;
+	text-align: center;
+	line-height: 37px;
+	color: #333333;
+	font-weight: bold;
+}
+
+#login {
+	margin-top: 120px;
+	margin-right: auto;
+	margin-left: auto;
+	width: 400px;
+}
+
+.sapMBar {
+	height: 40px;;
+	line-height: 40px;;
+	color: #666666;
+	background-color: #f2f2f2;
+	text-shadow: 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
+	-webkit-box-shadow: inset 0 -0.0625rem #dddddd;
+	box-shadow: inset 0 -0.0625rem #dddddd;
+	margin-bottom: 8px;
+}
+
+.sapMPanelBG {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+.sapMLabel {
+	color: #666666;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	display: inline-block;
+	padding-left: 16px;
+	width: 68px;
+}
+
+.sapUiSraLoginHidden {
+	
+}
+
+.sapMInputBase {
+	background-color: transparent;
+	border: none;
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.sapMInputBaseInner {
+	color: #000000;
+	background-color: transparent;
+	box-shadow: 0 0 0 0;
+	border: 0 none;
+	outline: 0;
+	margin: 0px;
+	width: 300px;
+	height: 30px;
+	font-weight: normal;
+	font-size: 15px;
+}
+
+.sapMInputBaseInner:focus {
+	color: #000000;
+	background-color: transparent;
+	box-shadow: 0 0 0 0;
+	border: 0 none;
+	outline: 0;
+	margin: 0px;
+}
+
+#btnEntrar {
+	background-color: #ffffff;
+	height: 35px;
+	width: 101%;
+	border: 1px solid #afafaf;
+}
+
+#btnEntrar:hover {
+	background-color: #1A62D9;
+	cursor: pointer;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.sapMLabelBold {
+	font-weight: bold;
+}
+
+.sapMPanelBtn {
+	width: 100%;
+	padding-bottom: 12px;
+}
+
+.sapMBtnContent {
+	font-size: 16px;
+	color: #000000;
+	border: 0px solid #ffffff;
+	text-shadow: none;
+	box-shadow: 0px 0px 0px #000000;
+	-moz-box-shadow: 0px 0px 0px #000000;
+	-webkit-box-shadow: 0px 0px 0px #000000;
+	border-radius: 0px 0px 0px 0px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	-webkit-border-radius: 0px 0px 0px 0px;
+	width: 100%;
+	height: 48px;
+	cursor: pointer;
+	margin: 0 auto;
+}
+
+.blue {
+	background: #009de0;
+}
+
+.Cin {
+	background: #f2f2f2;
+}
+
+.i2Style:active {
+	cursor: pointer;
+	position: relative;
+	top: 2px;
+}
+
+.sapUiSraFooter {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	height: 64px;
+	z-index: 99;
+}
+
+.sapUiSraLoginLogo {
+	position: absolute;
+	bottom: 16px;
+	right: 16px;
+	height: 32px;
+}
+
+.sapUiSraLoginCopyright {
+	position: absolute;
+	bottom: 16px;
+	left: 16px;
+	font-size: 22px;
+	max-width: 600px;
+	text-align: right;
+	color: white;
+}
+
+.sapUiSraLoginCopyright_Right {
+	position: absolute;
+	bottom: 16px;
+	right: 16px;
+	font-size: 20px;
+	max-width: 600px;
+	text-align: right;
+	color: white;
+	text-decoration: none;
+}
+
+.sapUiSraLoginCopyright_Right a{
+	text-decoration: none;
+	color: white;
+}
+
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: rgba(255, 255, 255, .8)
+		url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+	overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+	display: block;
+}
+
+#screenMask {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 1000;
+	background-color: #000;
+	opacity: 0.7;
+	filter: alpha(opacity = 70);
+	visibility: hidden;
+	cursor: progress;
+}
+
+/*
+.ui-helper-clearfix {
+        display: none;}*/
+.modalCarregando {
+	visibility: hidden;
+}
+
+.ui-widget-overlay {
+	cursor: progress;
+
+	}
+	
+	
+	
+	
+@media screen and (max-width: 400px) {	
+.sapMInputBaseInner {
+	color: #000000;
+	background-color: transparent;
+	box-shadow: 0 0 0 0;
+	border: 0 none;
+	outline: 0;
+	margin: 0px;
+	width: 250px;
+	height: 40px;
+	font-weight: normal;
+	font-size: 15px;
+}
+
+#login {
+	margin-top: 40px;
+	margin-right: auto;
+	margin-left: auto;
+	width: 350px;
+}
+}

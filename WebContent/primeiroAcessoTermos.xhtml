@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css"
+			href="#{facesContext.externalContext.requestContextPath}/static/css/fioriLogin.css?v=#{initParam['build']}" />
+		<link rel="shortcut icon"
+			href="#{facesContext.externalContext.requestContextPath}/static/images/netshoesN.png" />
+		<title><ui:insert name="title">Portal Financeiro</ui:insert></title>
+	</h:head>
+	<h:body class="sapUiBody">
+		<h:form id="form" prependId="false">
+
+			<h:panelGroup rendered="#{empty usuarioBean.txtUsuario}"
+				style="top:10px; left:10px;position:absolute; width:150px;">
+				<div class="sapMPanelBtn">
+					<p:commandButton value="Voltar a tela de Login"
+						class="sapMBtnContent blue"
+						actionListener="#{usuarioBean.goToIndex}" oncomplete=":form:msgs" />
+
+				</div>
+			</h:panelGroup>
+
+			<!--   <h:panelGroup rendered="#{not empty usuarioBean.txtUsuario}">-->
+
+
+			<div
+				style="width: 70%; border: 1px solid black; background-color: rgba(255, 255, 255, 0.85); border-radius: 15px; padding: 10px; position: absolute; left: 15%; top: 5%">
+				<h1 style="text-align: center;">Termo de Aceite – Antecipação de Recebíveis</h1>
+
+				<p>O presente instrumento aplicável ao fornecedor da Grupo
+					Netshoes Brasil pessoa física ou jurídica tem como objetivo alinhar
+					os pontos abaixo entre as partes nos seguintes itens:</p>
+
+				<p>1. O fornecedor, após efetivar a solicitação da antecipação
+					de recebíveis, declara estar de acordo com as taxas e tarifas
+					cobradas pela Grupo Netshoes Brasil.</p>
+
+				<p style="padding-left: 20px">1.1. O fornecedor concorda que as
+					taxas e tarifas praticadas pela Grupo Netshoes Brasil não possuem
+					relação nenhuma com o mercado e seguem premissas estabelecidas pela
+					própria empresa;</p>
+
+				<p>2. O fornecedor declara que conhece a operação financeiras de
+					“Antecipação de Recebíveis”.</p>
+
+				<p>3. O fornecedor assume que todos os seus colaboradores com
+					acesso ao Portal de Antecipação de Recebíveis possuem poderes para
+					simular, solicitar e confirmar a operação de antecipação de
+					recebíveis.</p>
+
+				<p>4. O fornecedor declara ciência de que só poderão ser
+					solicitadas antecipações de notas fiscais que tiverem suas
+					mercadorias efetivamente entregues e/ou serviços devidamente
+					prestados ao Grupo Netshoes Brasil, respeitando o prazo de um dia
+					útil para a inclusão no sistema.</p>
+
+				<p>5. O fornecedor concorda que a Grupo Netshoes Brasil não tem
+					obrigação de antecipar todas as notas emitidas pelo fornecedor
+					conta a empresa, ficando à critério da companhia a seleção e
+					disponibilização das notas fiscais aptas para antecipação conforme
+					premissas da própria empresa.</p>
+
+				<p>6. O fornecedor declara que após confirmar a solicitação de
+					antecipação de recebível cancelará todos os boletos já emitidos
+					para pagamentos das notas antecipadas.</p>
+
+				<p>7. O fornecedor se compromete a não ceder os seus créditos
+					para quaisquer outras pessoas físicas e/ou jurídicas, incluindo
+					Bancos, Factorings etc, ficando o Grupo Netshoes Brasil
+					absolutamente isento de qualquer ônus gerado por eventual
+					antecipação de recebíveis efetuada pelo fornecedor, que não seja
+					com a própria empresa.</p>
+
+				<table style="width: 100%">
+					<tr>
+						<td style="width: 50%"><div class="sapMPanelBtn">
+								<p:commandButton value="#{msg.LabelConcordo}"
+									class="sapMBtnContent blue"
+									actionListener="#{usuarioBean.pegaIP}"
+									oncomplete=":form:msgs" />
+
+							</div></td>
+						<td style="width: 50%"><div class="sapMPanelBtn">
+								<p:commandButton value="#{msg.LabelNaoConcordo}"
+									class="sapMBtnContent blue"
+									actionListener="#{usuarioBean.pegaIP}"
+									oncomplete=":form:msgs" />
+
+							</div></td>
+					</tr>
+				</table>
+
+			</div>
+
+
+
+
+			<div class="sapUiSraFooter">
+				<div class="sapUiSraLoginLogo">
+					<img
+						src="#{facesContext.externalContext.requestContextPath}/static/images/logoGrupoNetshoesBranco.png"
+						style="height: 30px;" />
+				</div>
+				<div class="sapUiSraLoginCopyright">
+					<h:outputText value="#{msg.LabelFooter}"></h:outputText>
+				</div>
+			</div>
+			<div style="font-size: xx-small;">
+				<p:growl id="msgs" showDetail="true" />
+			</div>
+
+			<!--</h:panelGroup>-->
+		</h:form>
+	</h:body>
+</f:view>
+</html>

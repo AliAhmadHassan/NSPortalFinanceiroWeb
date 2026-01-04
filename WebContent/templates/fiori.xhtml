@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:z="http://xmlns.jcp.org/jsf/html">
+
+<f:view>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			crossorigin="anonymous" />
+
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+			crossorigin="anonymous" />
+
+		<link rel="stylesheet" type="text/css"
+			href="#{facesContext.externalContext.requestContextPath}/static/css/fiori.css" />
+
+
+		<link rel="shortcut icon"
+			href="#{facesContext.externalContext.requestContextPath}/static/images/favicon.png" />
+		<title><ui:insert name="title">Portal de Fornecedores</ui:insert></title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script>
+			$(document).ready(function() {
+				var Height = $(document).height();
+				$('#painelHeaderMenuLateral').css({
+					'height' : Height - 50
+				});
+
+				$('.panelAvisos').css({
+					'height' : Height - 60
+				});
+
+				$('.painelHeaderMenu').on('click touchstart', function(e) {
+					$('html').toggleClass('menu-active');
+					e.preventDefault();
+				});
+			});
+		</script>
+	</h:head>
+
+	<h:body
+		style="	background: url('#{facesContext.externalContext.requestContextPath}/static/images/fioriBackground.png');
+	background-attachment: fixed;
+	background-size: 2px 100%;
+	margin: 0px;
+	font-family: Arial,Helvetica,sans-serif;">
+		<h:form id="formMensagem" name="formMensagem" prependId="false">
+			<p:growl id="msgs" showDetail="true" />
+		</h:form>
+
+		<div id="header">
+			<div style="display: inline-block; padding: 5px;">
+				<div class="painelHeaderMenu"
+					style="padding: 5px; border-right: 1px dotted silver;">
+					<img
+						src="#{facesContext.externalContext.requestContextPath}/static/images/ShowHideMenu.png"
+						style="width: 22px;"></img>
+				</div>
+
+			</div>
+			<div style="display: inline-block;">
+				<div style="padding-top: 10px; display: inline-block;"></div>
+			</div>
+			<div style="display: inline-block; float: right;">
+				<div style="display: inline-block;">
+					<div
+						style="padding: 5px; margin-top: 5px; border-right: 1px dotted silver;">
+						<p:commandLink oncomplete="PF('dlgFaleConosco').show()"
+							update="panelFaleConosco" action="#{contatoBean.limparContato}"
+							rendered="#{not administracaoUsuarioBean.usuarioInterno}">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/mail.png"
+								style="height: 27px;" title="Fale Conosco"></img>
+						</p:commandLink>
+					</div>
+				</div>
+				<div style="display: inline-block;">
+
+
+					<div style="padding: 5px; border-right: 1px dotted silver;"
+						class="visible-xs"
+						onclick="javascript: document.getElementById('panelAviso').classList.remove('hidden-xs'); ">
+						<img
+							src="#{facesContext.externalContext.requestContextPath}/static/images/postit.png"
+							style="height: 27px;"> </img>
+						<h:outputText value="#{menuPrincipalBean.lstAvisosLength}"
+							style="font-size: small; color: red; position: relative; left: -22px; top: 4px;" />
+
+					</div>
+
+				</div>
+				<div style="display: inline-block;">
+
+					<div style="padding: 5px; border-right: 1px dotted silver;">
+						<img
+							src="#{facesContext.externalContext.requestContextPath}/static/images/VeryBasicHelpIcon.png"
+							style="height: 27px;"></img>
+					</div>
+				</div>
+
+				<h:panelGroup styleClass="panelHeaderUsuario"
+					style="display: inline-block; padding: 5px; border-right: 1px dotted silver;">
+					<img
+						src="#{facesContext.externalContext.requestContextPath}/static/images/UserSetting.png"
+						style="height: 25px; padding-left: 5px;"> </img>
+					<h:outputText style="position:relative; right:10px; top:7px; "
+						styleClass="hidden-xs" value="#{usuarioBean.name}" />
+
+				</h:panelGroup>
+
+
+				<h:panelGroup id="PanelHeaderDadosUsuario"
+					class="panelHeaderDadosUsuario"
+					style="padding-top:9px; padding-left:10px;">
+					<span
+						style="width: 0px; height: 0px; border: 17px solid transparent; display: block; border-bottom-color: black; margin-left: 65px;" />
+					<h:panelGroup class="interno">
+						<table style="font-size: small; width: 100%;">
+							<tr>
+								<td colspan="2"><b><i>#{usuarioBean.usuario.NAME}</i></b></td>
+							</tr>
+							<tr>
+								<td colspan="2">#{usuarioBean.usuario.LIFNR}-#{usuarioBean.nomeFornecedor}</td>
+							</tr>
+							<tr>
+								<td>#{msg.LabelValidoDesde}:</td>
+								<td><h:outputText value="#{usuarioBean.usuario.GLTGV}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputText></td>
+							</tr>
+							<tr>
+								<td>#{msg.LabelValidoAte}:</td>
+								<td><h:outputText value="#{usuarioBean.usuario.GLTGB}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputText></td>
+							</tr>
+						</table>
+					</h:panelGroup>
+				</h:panelGroup>
+				<div style="display: inline-block;">
+					<div style="padding: 5px; border-right: 1px dotted silver;">
+						<p:commandLink onclick="PF('dlgNovaSenha').show()"
+							style="color:white;">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/alterarSenha.png"
+								style="height: 27px;" title="Alterar Senha" />
+						</p:commandLink>
+					</div>
+				</div>
+				<div style="display: inline-block;">
+					<div style="padding: 5px; border-right: 1px dotted silver;">
+
+						<h:form id="formLogoff">
+							<p:commandLink onclick="PF('dlgLogoff').show()"
+								style="color:white;">
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/logoff2.png"
+									style="height: 27px;" title="Sair" />
+							</p:commandLink>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<div id="painelHeaderMenuLateral" class="painelHeaderMenuLateral">
+
+			<div class="interno">
+				<c:if test="#{not empty menuPrincipalBean.menuGestaoUsuarioItens}">
+
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuGestaoUsuarioItens}">
+						<div
+							style="padding-left: 27px; padding-top: 15px; padding-bottom: 15px; border-top: 1px solid silver; font-size: 12px;">
+							<p:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+								style="text-decoration: none">
+								<f:param name="urlMenu" value="#{item.url}" />
+								#{item.titulo}
+							</p:commandLink>
+						</div>
+					</ui:repeat>
+
+				</c:if>
+
+				<c:if
+					test="#{not empty menuPrincipalBean.menuGestaoFornecedorItens}">
+
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuGestaoFornecedorItens}">
+						<div
+							style="padding-left: 27px; padding-top: 15px; padding-bottom: 15px; border-top: 1px solid silver; font-size: 12px;">
+							<p:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+								style="text-decoration: none">
+								<f:param name="urlMenu" value="#{item.url}" />
+								#{item.titulo}
+							</p:commandLink>
+						</div>
+					</ui:repeat>
+
+				</c:if>
+
+				<c:if
+					test="#{not empty menuPrincipalBean.menuAntecipacaoFinanceiraItens}">
+
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuAntecipacaoFinanceiraItens}">
+						<div
+							style="padding-left: 27px; padding-top: 15px; padding-bottom: 15px; border-top: 1px solid silver; font-size: 12px;">
+							<p:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+								style="text-decoration: none">
+								<f:param name="urlMenu" value="#{item.url}" />
+								#{item.titulo}
+							</p:commandLink>
+						</div>
+					</ui:repeat>
+
+				</c:if>
+
+				<c:if test="#{not empty menuPrincipalBean.menuPublicacaoItens}">
+					<ui:repeat var="item"
+						value="#{menuPrincipalBean.menuPublicacaoItens}">
+						<div
+							style="padding-left: 27px; padding-top: 15px; padding-bottom: 15px; border-top: 1px solid silver; font-size: 12px;">
+							<p:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+								style="text-decoration: none">
+								<f:param name="urlMenu" value="#{item.url}" />
+								#{item.titulo}
+							</p:commandLink>
+						</div>
+					</ui:repeat>
+
+				</c:if>
+			</div>
+		</div>
+
+
+
+		<div id="content">
+			<ui:insert name="content">
+    			Content area.  See comments below this line in the source.
+  			</ui:insert>
+		</div>
+
+		<div id="footer">
+			<ui:insert name="footer">
+    			Footer area.  See comments below this line in the source.
+  			</ui:insert>
+		</div>
+
+		<p:dialog widgetVar="dlgNovaSenha" modal="true"
+			header="Alteração de Senha" resizable="false">
+			<p:outputPanel>
+				<h:form id="formAlteraSenha" name="formAlteraSenha"
+					prependId="false">
+
+					<div class="modalPopUpGroupField">
+						<table>
+							<tr>
+								<td><h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelNovaSenha}" />
+									</h:panelGroup></td>
+								<td><h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelRepete}" />
+									</h:panelGroup></td>
+							</tr>
+
+							<tr>
+								<td><h:inputSecret value="#{usuarioBean.txtNovaSenha}"
+										type="password" /></td>
+								<td><h:inputSecret value="#{usuarioBean.txtRepeteSenha}"
+										type="password" /></td>
+							</tr>
+
+							<tr>
+								<td colspan="2"><p:commandButton value="#{msg.LabelSalvar}"
+										actionListener="#{usuarioBean.alteraSenhaSemCod}"
+										oncomplete="PF('dlgNovaSenha').hide()" style="width:100%;"
+										update=":formMensagem:msgs" /></td>
+							</tr>
+						</table>
+					</div>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog widgetVar="dlgLogoff" modal="true" header="Atenção"
+			resizable="false">
+			<p:outputPanel>
+				Realmente deseja sair do Portal de Fornecedores?<br />
+				<br />
+				<div style="text-align: center;">
+
+					<p:commandButton value="Sim" actionListener="#{usuarioBean.logoff}"
+						oncomplete="PF('dlgLogoff').hide()" />
+
+					<p:commandButton value="Não" onclick="PF('dlgLogoff').hide()" />
+
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog id="dlgFaleConosco" closeOnEscape="true"
+			header="Fale Conosco" widgetVar="dlgFaleConosco" modal="true">
+			<p:outputPanel id="panelFaleConosco"
+				style="max-width:692px; max-height: 400px;">
+				<h:form id="formFaleConosco" enctype="multipart/form-data"
+					prependId="false">
+					<p:growl id="msgs2" showDetail="true" />
+					<div class="table">
+						<div class="row">
+							<div class="col-md-12" style="text-align: left">
+								<span>Envie um e-mail para a Célula Financeira com a sua
+									sugestão <br />ou dúvida.<br /> <br />
+								</span>
+							</div>
+						</div>
+						<div class="row">
+
+							<div class="col-md-6" style="vertical-align: top;">
+								<h:outputText value="Departamento: " style="font-weight: bold;" />
+								<br />
+								<p:selectOneMenu id="selectDepartamento"
+									value="#{contatoBean.departamentoSelecionado}"
+									style="width:340px">
+									<p:ajax listener="#{contatoBean.filtraAssuntos}"
+										update="panelFaleConosco" />
+									<f:selectItem itemLabel="Departamento" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{contatoBean.departamentos}"
+										var="departamento" />
+								</p:selectOneMenu>
+								<h:outputText value="Assunto: " id="assunto"
+									style="font-weight: bold;"
+									rendered="#{not empty contatoBean.assuntos}" />
+								<br />
+								<p:selectOneMenu id="selectAssunto"
+									value="#{contatoBean.assuntoSelecionado}"
+									rendered="#{not empty contatoBean.assuntos}"
+									style="width:340px">
+									<p:ajax listener="#{contatoBean.filtraSubAssuntos}"
+										update="formFaleConosco" />
+									<f:selectItem itemLabel="Assunto" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{contatoBean.assuntos}" />
+								</p:selectOneMenu>
+								<h:outputText value="Sub-Assunto: " id="subAssunto"
+									style="font-weight: bold;"
+									rendered="#{not empty contatoBean.subAssuntos}" />
+								<p:selectOneMenu id="selectSubAssunto"
+									value="#{contatoBean.subAssuntoSelecionado}"
+									rendered="#{not empty contatoBean.subAssuntos}"
+									style="width:340px">
+									<p:ajax listener="#{contatoBean.filtraSubAssuntos}"
+										update="formFaleConosco" />
+									<f:selectItem itemLabel="Sub-Assunto" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{contatoBean.subAssuntos}" />
+								</p:selectOneMenu>
+								<h:outputText value="Filial: " id="filial"
+									style="font-weight: bold;"
+									rendered="#{not empty contatoBean.filial}" />
+								<p:selectOneMenu id="selectFilial"
+									value="#{contatoBean.filialSelecionado}"
+									rendered="#{not empty contatoBean.filial}" style="width:340px">
+									<p:ajax listener="#{contatoBean.filtraDestinatarios}"
+										update="formFaleConosco" />
+									<f:selectItem itemLabel="Filial" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{contatoBean.filial}" />
+								</p:selectOneMenu>
+								<h:outputText value="Mensagem: " style="font-weight: bold;" />
+								<br />
+								<h:inputTextarea value="#{contatoBean.mensagem}" rows="10"
+									style="width:340px; max-width:340px;" />
+
+
+
+							</div>
+
+							<div class="col-md-6 hidden-xs"
+								style="vertical-align: top; padding-top: 1px; padding-left: 10px;">
+								<span> <b>Escritorio Paulista</b><br /> Alameda Santos,
+									1827- Jardim Paulista
+								</span> <br /> <img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/mpAevee.jpg"
+									title="#{msg.LabelEditar}" style="height: 190px;" />
+							</div>
+						</div>
+						<div class="row">
+
+							<div class="col-md-12">
+								<div style="max-width: 650px">
+									<h:outputText
+										value="Anexo (Tamanho Maximo #{contatoBean.anexoSize} #{contatoBean.anexoSize2}):"
+										id="anexo" style="font-weight: bold;" />
+									<p:outputPanel id="panelAnexos">
+										<ui:repeat var="item" value="#{contatoBean.anexos}">
+											<div title="#{item.nomeArquivo}"
+												style="display: inline-block; border: 1px solid silver; border-radius: 10px; width: 75px; height: 60px; text-align: center;">
+
+												<div style="text-align: right;">
+													<p:commandLink action="#{contatoBean.deleteAnexo}"
+														update="panelAnexos">
+														<f:setPropertyActionListener value="#{item.nomeArquivo}"
+															target="#{contatoBean.anexoSelected}" />
+														<h:graphicImage value="/static/images/delete-icon16.png" />
+													</p:commandLink>
+
+												</div>
+
+												<h:graphicImage value="/static/images/jpg-icon.png"
+													rendered="#{item.extensao eq '.jpg'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/png-icon.png"
+													rendered="#{item.extensao eq '.png'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/pdf-icon.png"
+													rendered="#{item.extensao eq '.pdf'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/word-icon.png"
+													rendered="#{item.extensao eq '.doc'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/word-icon.png"
+													rendered="#{item.extensao eq '.docx'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/excel-icon.png"
+													rendered="#{item.extensao eq '.xls'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/excel-icon.png"
+													rendered="#{item.extensao eq '.xlsx'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/xml-icon.png"
+													rendered="#{item.extensao eq '.xml'}" class="hidden-xs"
+													style="position: relative; top:-15px; width: 35px;" />
+												<h:graphicImage value="/static/images/file-icon.png"
+													class="hidden-xs"
+													rendered="#{item.extensao ne '.jpg' and item.extensao ne '.png' and item.extensao ne '.pdf' and item.extensao ne '.doc' and item.extensao ne '.docx' and item.extensao ne '.xls' and item.extensao ne '.xlsx' and item.extensao ne '.xml'}"
+													style="position: relative; top:-15px; width: 35px;" />
+												<br />
+												<h:outputLabel
+													value="#{item.nomeArquivo.length() > 14 ? item.nomeArquivo.substring(0,11).concat('...') : item.nomeArquivo}"
+													style="position: relative; top:-15px; font-size: x-small;" />
+
+
+											</div>
+										</ui:repeat>
+									</p:outputPanel>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<p:fileUpload sizeLimit="#{contatoBean.anexoSize*1024*1024}"
+									invalidSizeMessage="O tamanho máximo permitido é de #{contatoBean.anexoSize} #{contatoBean.anexoSize2}."
+									fileUploadListener="#{contatoBean.handleFileUpload}"
+									multiple="true" label="Selecione arquivo(s)" skinSimple="true"
+									auto="true" update="panelFaleConosco, panelAnexos, msgs2" />
+								<br />
+								<h:outputLabel
+									value="Anexar XML, DANFE ou documento pertinente."
+									rendered="#{contatoBean.anexoVisible}" />
+								<h:outputText
+									value="Tipos de arquivos permitidos: #{contatoBean.anexoExtensions}" />
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div style="width: 100%; text-align: right">
+									<p:commandButton actionListener="#{contatoBean.limparContato}"
+										style="height:30px;" update="panelFaleConosco" value="Limpar">
+									</p:commandButton>
+
+									<p:commandLink actionListener="#{contatoBean.enviar}"
+										update="@form">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/send.png"
+											title="ENVIAR" />
+									</p:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog id="dlgRespostaAuto" closeOnEscape="true"
+			header="Fale Conosco" widgetVar="dlgRespostaAuto" modal="true"
+			resizable="true" width="500">
+			<p:outputPanel id="panelRespostaAuto">
+				<h:outputText value="#{contatoBean.respostaAuto}"></h:outputText>
+				<br />
+				<div style="text-align: center">
+					<p:commandButton action="#{contatoBean.redirectMain}" value="OK" />
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog id="dlgSessaoExpirada" closeOnEscape="true"
+			header="Sessão Expirada" widgetVar="dlgRespostaAuto" modal="true"
+			resizable="true" width="500">
+			<p:outputPanel id="panelSessaoExpirada">
+				<h:outputText
+					value="Sessão Expirada, favor efetuar o Login novamente."></h:outputText>
+				<br />
+				<div style="text-align: center">
+					<p:commandButton action="#{contatoBean.redirectToIndex}" value="OK" />
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>

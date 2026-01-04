@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css"
+			href="#{facesContext.externalContext.requestContextPath}/static/css/fioriLogin.css?v=#{initParam['build']}" />
+		<link rel="shortcut icon"
+			href="#{facesContext.externalContext.requestContextPath}/static/images/favicon.png" />
+		<title><ui:insert name="title">Portal Financeiro</ui:insert></title>
+	</h:head>
+	<h:body class="sapUiBody">
+		<h:form id="form" prependId="false">
+
+			<h:panelGroup rendered="#{empty usuarioBean.txtUsuario}"
+				style="top:200px; left:500px;position:absolute">
+				<div class="sapMPanelBtn">
+					<p:commandButton value="Voltar a tela de Login"
+						class="sapMBtnContent blue"
+						actionListener="#{usuarioBean.goToIndex}" oncomplete=":form:msgs" />
+
+				</div>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{not empty usuarioBean.txtUsuario}">
+				<div id="login">
+								<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/aevee.png" />
+					<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+						<h:outputText class="sapMLabel" value="#{msg.LabelSenha}" />
+						<div class="sapMInputBase">
+							<p:inputText id="txtLogin" type="password"
+								value="#{usuarioBean.txtNovaSenha}" class="sapMInputBaseInner"></p:inputText>
+						</div>
+					</div>
+					<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+						<h:outputText class="sapMLabel" value="#{msg.LabelRepete}" />
+						<div class="sapMInputBase">
+							<p:inputText id="txtSenha" type="password"
+								value="#{usuarioBean.txtRepeteSenha}" class="sapMInputBaseInner"></p:inputText>
+						</div>
+					</div>
+
+					<div class="sapMPanelBtn">
+						<p:commandButton value="#{msg.btnLogin}"
+							class="sapMBtnContent blue"
+							actionListener="#{usuarioBean.alteraSenhaLogin}"
+							oncomplete=":form:msgs" />
+
+					</div>
+				</div>
+				<div class="sapUiSraFooter">
+<div class="sapUiSraLoginLogo" style="top:-30px;">
+				<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/aevee.png"
+					style="height: 100px;" />
+			</div>
+			<div class="sapUiSraLoginCopyright">
+				<h:outputText value="#{msg.LabelFooter}"></h:outputText>
+			</div>
+		</div>
+				<div style="font-size: xx-small;">
+					<p:growl id="msgs" showDetail="true" />
+				</div>
+				
+			</h:panelGroup>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

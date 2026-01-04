@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="static/css/portal.css" />
+		<title><ui:insert name="title">Default title</ui:insert></title>
+	</h:head>
+
+	<h:body>
+		<div id="header">
+			<table width="100%">
+				<tr>
+					<td style="width: 100px"><img
+						src="static/images/PortalFornecedor.png"
+						style="height: 80px; padding-left: 25px;" /></td>
+					<td style="width: 250px">Netshoes <br /> <span
+						style="font-size: x-large"><b>Portal Financeiro</b></span>
+					</td>
+					<td
+						style="text-align: right; vertical-align: top; padding-top: 7px; width: auto">
+						<div style="text-align: right;">
+							<table>
+								<tr>
+									<td style="vertical-align: central;"><img
+										src="static/images/settings-B-64.png" style="height: 55px;" /></td>
+									<td>Cadastro</td>
+									<td style="vertical-align: central;"><img
+										src="static/images/report-A-64.png" style="height: 55px;" /></td>
+									<td>Relatorio</td>
+									<td style="vertical-align: center;"><img
+										src="static/images/Balance-icon-64.png" style="height: 55px;" /></td>
+									<td>Teste2</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<ui:insert name="header">
+			</ui:insert>
+		</div>
+
+
+		<div id="content">
+			<ui:insert name="content">
+	    	Content area.  See comments below this line in the source.
+	    		<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
+				<!-- <div> -->
+				<!-- <ui:include src="content.xhtml"/> -->
+				<!-- </div> -->
+			</ui:insert>
+		</div>
+
+		<div id="footer">
+			<ui:insert name="footer">
+    			Portal de Fornecedores Vers&atilde;o 2014 - Build 01.00 - Powered by Netshoes 
+    			<!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
+				<!--<ui:include src="footer.xhtml"/>  -->
+			</ui:insert>
+		</div>
+
+	</h:body>
+</f:view>
+</html>

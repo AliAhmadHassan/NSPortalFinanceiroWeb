@@ -1,0 +1,469 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/fioriInterno.xhtml">
+	<ui:define name="header">
+		<span class="hidden-xs">Administração de Usuários</span>
+		<span class="visible-xs">Usuários</span>
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form" name="form" prependId="false">
+
+			<p:spacer height="30px" />
+			<p:growl id="msgs" showDetail="true" />
+
+
+
+			<div class="panelDataTabelPrincipal">
+				<div style="text-align: right; font-size: small">
+					<h:commandLink>
+						<img
+							src="#{facesContext.externalContext.requestContextPath}/static/images/excel-icon32.png"
+							title="Exportar para o Excel" />
+						<p:dataExporter type="xls" target="recordsTable"
+							fileName="Portal_Usuários_#{administracaoUsuarioBean.dataAtual}" />
+					</h:commandLink>
+				</div>
+				<div class="panelDataTabelPrincipalBranco">
+					<p:dataTable id="recordsTable" var="record"
+						value="#{administracaoUsuarioBean.records}"
+						filteredValue="#{administracaoUsuarioBean.filteredRecords}"
+						widgetVar="recordsTable">
+
+						<p:column headerText="#{msg.LabelUsuario}" priority="1"
+							filterBy="#{record.users.USNAME}" filterMatchMode="contains"
+							style="font-weight:bold">
+							<h:outputText value="#{record.users.USNAME}" />
+
+						</p:column>
+
+						<p:column headerText="#{msg.LabelNomeUsuario}" priority="3"
+							filterBy="#{record.users.NAME}" filterMatchMode="contains">
+							<h:outputText value="#{record.users.NAME}" />
+						</p:column>
+
+						<p:column headerText="#{msg.LabelValidoDesde}" priority="5"
+							style="text-align:center;">
+							<h:outputText value="#{record.users.GLTGV}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelValidoAte}" priority="6"
+							style="text-align:center;">
+							<h:outputText value="#{record.users.GLTGB}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelStatus}" priority="4"
+							style="text-align:center;">
+							<h:outputText value="Bloqueado"
+								rendered="#{record.users.UFLAG eq '1'}" />
+							<h:outputText value="Não Bloqueado"
+								rendered="#{record.users.UFLAG eq '0'}" />
+						</p:column>
+
+						<p:column headerText="#{msg.LabelLIFNR}" priority="7"
+							filterBy="#{record.users.LIFNR}" filterMatchMode="contains"
+							rendered="#{administracaoUsuarioBean.usuarioInterno}">
+							<h:outputText value="#{record.users.LIFNR}" />
+						</p:column>
+
+
+						<p:column headerText="#{msg.LabelCNPJ}" priority="8"
+							filterBy="#{record.users.DUMMY1}" filterMatchMode="contains"
+							rendered="#{administracaoUsuarioBean.usuarioInterno}">
+							<h:outputText value="#{record.users.DUMMY1}" />
+						</p:column>
+
+						<p:column headerText="#{msg.LabelRazaoSocial}" priority="9"
+							filterBy="#{record.users.DUMMY2}" filterMatchMode="contains"
+							rendered="#{administracaoUsuarioBean.usuarioInterno}">
+							<h:outputText value="#{record.users.DUMMY2}" />
+						</p:column>
+
+
+
+						<p:column style="width:100px; text-align:center"
+							headerText="Detalhe" priority="1" exportable="false">
+							<p:commandButton update=":form:UserPanelAlter"
+								oncomplete="PF('dlgUser').show()" icon="ui-icon-search"
+								title="View">
+								<f:setPropertyActionListener value="#{record}"
+									target="#{administracaoUsuarioBean.selectRecord}" />
+								<f:setPropertyActionListener value="false"
+									target="#{administracaoUsuarioBean.novoContato}" />
+
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+
+
+
+					<p:outputPanel
+						rendered="#{administracaoUsuarioBean.usuarioInterno}"
+						style="text-align: right; background-color: #DDEFF1; padding-right: 35px;">
+						<p:commandLink update=":form:UserPanelAlter"
+							oncomplete="PF('dlgUser').show()">
+							<f:setPropertyActionListener value="true"
+								target="#{administracaoUsuarioBean.novoContato}" />
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/userNew16.png"
+								title="#{msg.LabelNovo}" />
+						</p:commandLink>
+					</p:outputPanel>
+				</div>
+			</div>
+
+			<p:dialog id="dlgUser" closeOnEscape="true"
+				header="#{msg.LabelCadastro} #{msg.LabelUsuario}"
+				widgetVar="dlgUser" modal="true">
+				<p:outputPanel id="UserPanelAlter" style="overflow-y: auto">
+
+					<div class="modalPopUpGroupField">
+						<h:panelGroup styleClass="headerGroup">
+							Dados Gerais
+						</h:panelGroup>
+						<hr />
+
+						<div class="col-xs-12 col-sm-12 col-lg-12">
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelUSNAME}</h:panelGroup>
+								</div>
+								<div>
+									<p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno and administracaoUsuarioBean.novoContato}"
+										value="#{administracaoUsuarioBean.selectRecord.users.USNAME}" />
+									<p:outputLabel
+										rendered="#{not administracaoUsuarioBean.usuarioInterno or not administracaoUsuarioBean.novoContato}"
+										value="#{administracaoUsuarioBean.selectRecord.users.USNAME}" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-lg-6">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelNomeUsuario}</h:panelGroup>
+								</div>
+								<div>
+									<p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.users.NAME}"
+										style="width: 639px;" />
+									<p:outputLabel
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.users.NAME}" />
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-12 col-sm-12 col-lg-12">
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelLIFNR}</h:panelGroup>
+								</div>
+								<div>
+									<p:outputLabel
+										value="#{administracaoUsuarioBean.selectRecord.users.LIFNR}" />
+
+									<p:commandLink onclick="PF('dlgFornecedor').show()"
+										style="text-decoration: none"
+										rendered="#{administracaoUsuarioBean.usuarioInterno}">
+										<img
+											src="#{facesContext.externalContext.requestContextPath}/static/images/StartMenuSearchicon.png"
+											width="12px" />
+									</p:commandLink>
+								</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelRazaoSocial}</h:panelGroup>
+								</div>
+								<div>
+									<p:outputLabel
+										value="#{administracaoUsuarioBean.selectRecord.users.DUMMY2}" />
+								</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-3 col-lg-3">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelCNPJ}</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{administracaoUsuarioBean.selectRecord.users.DUMMY1}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.CNPJConverter" />
+									</h:outputText>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-12  col-sm-12 col-lg-12" style="margin-bottom: 20px;">
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelUSTYPE}</h:panelGroup>
+								</div>
+								<div>
+									<p:selectOneMenu id="USTYP"
+										value="#{administracaoUsuarioBean.selectRecord.users.USTYP}"
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										style="width:130px">
+										<f:selectItem itemLabel="Usuario Analista" itemValue="UI" />
+										<f:selectItem itemLabel="Usuario Fornecedor" itemValue="UE" />
+									</p:selectOneMenu>
+									<p:outputLabel
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="Usuario Fornecedor" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelUSFLAG}</h:panelGroup>
+								</div>
+								<div>
+									<p:selectOneMenu id="UFLAG"
+										value="#{administracaoUsuarioBean.selectRecord.users.UFLAG}"
+										rendered="#{administracaoUsuarioBean.usuarioInterno}">
+										<f:selectItem itemLabel="Não Bloqueado" itemValue="0" />
+										<f:selectItem itemLabel="Bloqueado" itemValue="1" />
+
+									</p:selectOneMenu>
+									<c:if test="#{not administracaoUsuarioBean.usuarioInterno}">
+										<h:outputText value="Não Bloqueado"
+											rendered="#{administracaoUsuarioBean.selectRecord.users.UFLAG eq '0'}" />
+										<h:outputText value="Bloqueado"
+											rendered="#{administracaoUsuarioBean.selectRecord.users.UFLAG eq '1'}" />
+									</c:if>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3 col-lg-3">
+								<div>
+									<h:panelGroup styleClass="header">#{msg.LabelDataValidade}</h:panelGroup>
+								</div>
+								<div>
+									<p:calendar pattern="dd/MM/yyyy"
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.users.GLTGV}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</p:calendar>
+									<h:outputText
+										value="#{administracaoUsuarioBean.selectRecord.users.GLTGV}"
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputText>
+									#{msg.LabelAte}
+									<p:calendar pattern="dd/MM/yyyy" style="width:100px;"
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.users.GLTGB}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</p:calendar>
+									<h:outputText
+										value="#{administracaoUsuarioBean.selectRecord.users.GLTGB}"
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputText>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modalPopUpGroupField">
+						<h:panelGroup styleClass="headerGroup">
+							Dados de Contato
+						</h:panelGroup>
+						<hr />
+
+						<div class="col-xs-12 col-md-12">
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div><h:panelGroup styleClass="header">Telefone1</h:panelGroup></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[0].TELNUMBER}" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[0].TELNUMBER}" /></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[1].TELNUMBER}" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[1].TELNUMBER}" /></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[2].TELNUMBER}" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[2].TELNUMBER}" /></div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div><h:panelGroup styleClass="header">Telefone2</h:panelGroup></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[0].TELEXTENS}" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[0].TELEXTENS}" /></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[1].TELEXTENS}" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[1].TELEXTENS}" /></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[2].TELEXTENS}" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[2].TELEXTENS}" /></div>
+							</div>
+							<div class="col-xs-12 col-sm-3 col-lg-3">
+								<div><h:panelGroup styleClass="header">E-Mail</h:panelGroup></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[0].SMTPADDR}"
+										style="width: 302px;" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[0].SMTPADDR}"
+										style="width: 302px;" /></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[1].SMTPADDR}"
+										style="width: 302px;" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[1].SMTPADDR}"
+										style="width: 302px;" /></div>
+								<div><p:inputText
+										rendered="#{administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[2].SMTPADDR}"
+										style="width: 302px;" />
+									<h:outputText
+										rendered="#{not administracaoUsuarioBean.usuarioInterno}"
+										value="#{administracaoUsuarioBean.selectRecord.contacts[2].SMTPADDR}"
+										style="width: 302px;" /></div>
+							</div>
+						</div>
+
+						
+
+					</div>
+
+					<p:outputPanel
+						rendered="#{administracaoUsuarioBean.usuarioInterno}"
+						class="modalPopUpGroupField">
+						<h:panelGroup styleClass="headerGroup">
+							Perfil
+						</h:panelGroup>
+						<hr />
+						<h:panelGroup styleClass="header">
+							&nbsp;&nbsp;&nbsp;&nbsp;Perfis disponíveis:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							Perfil do Usuário:
+						</h:panelGroup>
+						<p:pickList id="pickList"
+							value="#{administracaoUsuarioBean.perfis}" var="perfis"
+							itemLabel="#{perfis}" itemValue="#{perfis}" />
+					</p:outputPanel>
+					<c:if test="#{administracaoUsuarioBean.novoContato}">
+						<p:outputPanel
+							rendered="#{administracaoUsuarioBean.usuarioInterno}"
+							class="modalPopUpGroupField">
+							<h:panelGroup styleClass="headerGroup">
+							Dados de Logon
+							</h:panelGroup>
+							<hr />
+							<table>
+								<tr>
+									<td><h:panelGroup styleClass="header">#{msg.LabelSenha}</h:panelGroup></td>
+									<td><h:panelGroup styleClass="header">#{msg.LabelRepete}</h:panelGroup></td>
+								</tr>
+
+								<tr>
+									<td><p:inputText type="password"
+											value="#{administracaoUsuarioBean.selectRecord.users.PASSCODE}" /></td>
+									<td><p:inputText type="password"
+											value="#{administracaoUsuarioBean.senhaConfirma}" /></td>
+								</tr>
+							</table>
+						</p:outputPanel>
+					</c:if>
+					<p:commandButton value="Salvar"
+						rendered="#{administracaoUsuarioBean.usuarioInterno}"
+						actionListener="#{administracaoUsuarioBean.salvar}"
+						update=":form:msgs :form:recordsTable" style="width:100%" />
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog closeOnEscape="true"
+				header="#{msg.LabelEscolherFornecedor}" widgetVar="dlgFornecedor"
+				width="900" height="270" modal="true">
+				<p:panel styleClass="panel">
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="2">
+							<h:outputText value="#{msg.LabelFiltro}:" />
+							<p:inputText value="#{fornecedorFiltroBean.campoPesquisa}"
+								style="width:270px;" />
+						</h:panelGrid>
+						<h:panelGrid>
+							<p:commandButton value="#{msg.LabelPesquisa}"
+								actionListener="#{fornecedorFiltroBean.atualizaGrid}"
+								update=":form:gridFornecedor" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:panel>
+				<p:spacer height="20" />
+				<p:dataTable var="fornecedor" id="gridFornecedor"
+					value="#{fornecedorFiltroBean.fornecedores}" rows="10"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{msg.GridVazio}" style="width:100%;"
+					rowsPerPageTemplate="5,10,25,50">
+
+					<p:column headerText="#{msg.LabelLIFNR}" style="width:150px">
+						<h:outputText value="#{fornecedor.LIFNR}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="#{msg.LabelRazaoSocial}">
+						<h:outputText value="#{fornecedor.NAME1}"></h:outputText>
+					</p:column>
+
+					<p:column headerText="#{msg.LabelCNPJ}" style="width:150px">
+						<h:outputText value="#{fornecedor.STCD1}"></h:outputText>
+					</p:column>
+
+					<p:column style="width:20px; text-align:center;">
+						<p:commandLink update=":form:UserPanelAlter"
+							oncomplete="PF('dlgFornecedor').hide()">
+							<f:setPropertyActionListener value="#{fornecedor.LIFNR}"
+								target="#{administracaoUsuarioBean.selectRecord.users.LIFNR}" />
+							<f:setPropertyActionListener value="#{fornecedor.STCD1}"
+								target="#{administracaoUsuarioBean.selectRecord.users.DUMMY1}" />
+							<f:setPropertyActionListener value="#{fornecedor.NAME1}"
+								target="#{administracaoUsuarioBean.selectRecord.users.DUMMY2}" />
+
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/CheckIcon24.png"
+								width="12px" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+	<ui:define name="footer">
+	</ui:define>
+</ui:composition>
+</html>

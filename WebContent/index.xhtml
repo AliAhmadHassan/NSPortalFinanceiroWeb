@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css"
+			href="#{facesContext.externalContext.requestContextPath}/static/css/fioriLogin.css?v=#{initParam['build']}" />
+		<link rel="shortcut icon"
+			href="#{facesContext.externalContext.requestContextPath}/static/images/favicon.png" />
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			crossorigin="anonymous" />
+
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+			crossorigin="anonymous" />
+
+		<title><ui:insert name="title">Portal Fornecedores</ui:insert></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	</h:head>
+	<h:body class="sapUiBody" id="Body">
+		<h:form id="form" prependId="false">
+
+			<p:dialog id="ajaxStatus" widgetVar="ajaxStatus" modal="true"
+				closable="false" draggable="false" resizable="false"
+				style="visibility: hidden; cursor: progress;">
+				<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/carregandoAguarde.gif" />
+			</p:dialog>
+
+
+			<div id="screenMask" class="screenMask" />
+
+			<div id="login">
+			
+				<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/aevee.png"
+					class="hidden-xs" /> 
+			<center class="visible-xs">		
+					<h:outputText value="#{msg.LabelFooter}" style="font-size:xx-large"/>
+					<br />
+					<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/aevee.png"
+					 style="width:200px"/>
+					</center>
+				<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+					<h:outputText class="sapMLabel" value="#{msg.LabelUsuario}" />
+					<div class="sapMInputBase">
+						<p:inputText id="txtLogin" value="#{usuarioBean.txtUsuario}"
+							class="sapMInputBaseInner"></p:inputText>
+					</div>
+				</div>
+				<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+					<h:outputText class="sapMLabel" value="#{msg.LabelSenha}" />
+					<div class="sapMInputBase">
+						<p:inputText id="txtSenha" type="password"
+							value="#{usuarioBean.txtSenha}" class="sapMInputBaseInner"></p:inputText>
+					</div>
+				</div>
+
+				<div class="sapMPanelBtn">
+					<p:commandButton value="#{msg.btnLogin}" id="btnLogar"
+						class="sapMBtnContent blue"
+						actionListener="#{usuarioBean.autentica}"
+						onclick="PF('ajaxStatus').show()" update=":form:msgs" />
+
+				</div>
+				<div class="sapMPanelBtn">
+					<p:commandButton value="#{msg.btnEsqueciSenha}"
+						id="btnSolicitaNovaSenha" class="sapMBtnContent blue"
+						actionListener="#{usuarioBean.solicitarEMail}"
+						oncomplete=":form:msgs" />
+				</div>
+			</div>
+			
+					<div class="visible-xs" style="text-align: center;">
+					<a href="http://www.aevee.com.br/" style="color:white"> <h:outputText
+							value="#{msg.labelCopyRight}"></h:outputText>
+					</a>
+				</div>
+			
+			<div class="sapUiSraFooter hidden-xs">
+				<div class="sapUiSraLoginLogo"></div>
+				<div class="sapUiSraLoginCopyright">
+					<h:outputText value="#{msg.LabelFooter}"></h:outputText>
+				</div>
+
+				<div class="sapUiSraLoginCopyright_Right">
+					<a href="http://www.aevee.com.br/"> <h:outputText
+							value="#{msg.labelCopyRight}"></h:outputText>
+					</a>
+				</div>
+			</div>
+			<div style="font-size: xx-small;">
+				<p:growl id="msgs" showDetail="true" />
+			</div>
+
+		</h:form>
+	</h:body>
+</f:view>
+</html>

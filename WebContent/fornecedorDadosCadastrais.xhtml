@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/fioriInterno.xhtml">
+	<ui:define name="header">
+		<span class="hidden-xs">Dados Cadastrais</span>
+		<span class="visible-xs">Fornecedores</span>
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form" name="form" prependId="false">
+			<p:spacer height="30px" />
+			<p:growl id="msgs" showDetail="true" />
+			<h:panelGroup
+				rendered="#{fornecedorDadosCadastraisBean.usuarioInterno}">
+				<div class="gridFilter">
+					<div class="modalPopUpGroupField">
+						<p:panel styleClass="panel">
+							<h:panelGrid columns="2">
+								<h:panelGrid columns="2">
+									<h:outputText value="#{msg.LabelFiltro}:" />
+
+									<h:panelGroup>
+										<p:inputText
+											value="#{fornecedorDadosCadastraisBean.campoPesquisa}"
+											rendered="#{fornecedorDadosCadastraisBean.usuarioInterno}"
+											style="width:270px;" />
+
+										<p:selectOneMenu id="selectfornecedor"
+											value="#{fornecedorDadosCadastraisBean.campoPesquisaSelecionado}"
+											rendered="#{not fornecedorDadosCadastraisBean.usuarioInterno}">
+											<f:selectItems
+												value="#{fornecedorDadosCadastraisBean.fornecedoresUsuarioExterno}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGrid>
+								<h:panelGrid>
+									<p:commandButton value="#{msg.LabelPesquisa}"
+										actionListener="#{fornecedorDadosCadastraisBean.atualizaGrid}"
+										update=":form:gridFornecedor" />
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:panel>
+					</div>
+				</div>
+			</h:panelGroup>
+			<div id="myTable" class="panelDataTabelPrincipal"
+				style="font-size: xx-small">
+				<div style="text-align: right; font-size: small">
+					<h:commandLink>
+						<img
+							src="#{facesContext.externalContext.requestContextPath}/static/images/excel-icon32.png"
+							title="Exportar para o Excel" />
+						<p:dataExporter type="xls" target="gridFornecedor"
+							fileName="Portal_CadastrosFornecedor_#{fornecedorDadosCadastraisBean.dataAtual}" />
+					</h:commandLink>
+				</div>
+				<div class="panelDataTabelPrincipalBranco">
+					<p:dataTable var="fornecedor" id="gridFornecedor"
+						value="#{fornecedorDadosCadastraisBean.fornecedores}" rows="10"
+						filteredValue="#{fornecedorDadosCadastraisBean.filteredfornecedores}"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{msg.GridVazio}" style="width:100%;"
+						rowsPerPageTemplate="5,10,25,50" widgetVar="gridFornecedor">
+
+
+
+						<p:column headerText="#{msg.LabelEmpr}" style="text-align:center"
+							priority="1" filterBy="#{fornecedor.NAME1}"
+							filterMatchMode="contains">
+							<h:outputText value="#{fornecedor.NAME1}"></h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelCNPJ}"
+							style="width:150px; text-align:center"
+							filterBy="#{fornecedor.STCD1}" filterMatchMode="contains">
+							<h:outputText value="#{fornecedor.STCD1}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.CNPJConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelLIFNR}" priority="2"
+							style="width:150px; text-align:center">
+							<h:outputText value="#{fornecedor.LIFNR}"></h:outputText>
+						</p:column>
+
+						<p:column style="width:40px; text-align:center;"
+							exportable="false" priority="1">
+							<p:commandButton update=":form:fornecedorDetail"
+								oncomplete="PF('dlgFornecedor').show()" icon="ui-icon-search"
+								title="View">
+								<f:setPropertyActionListener value="#{fornecedor}"
+									target="#{fornecedorDadosCadastraisBean.fornecedorSelecionado}" />
+							</p:commandButton>
+
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+			<p:dialog header="Informações do Fornecedor" closeOnEscape="true"
+				widgetVar="dlgFornecedor" modal="true">
+				<p:outputPanel id="fornecedorDetail"
+					style="max-width:800px; max-height: 600px; overflow-y: auto">
+
+					<div class="modalPopUpGroupField" style="margin-bottom: 20px;">
+						<h:panelGroup styleClass="headerGroup">
+							Dados Gerais
+						</h:panelGroup>
+						<hr />
+
+						<div class="col-xs-12 col-sm-12 col-lg-12">
+							<div class="col-xs-12 col-sm-6 col-lg-6">
+								<div>
+									<h:panelGroup styleClass="header">Razão Social</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.NAME1}#{fornecedorDadosCadastraisBean.fornecedorSelecionado.NAME2}" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-lg-6">
+								<div>
+									<h:panelGroup styleClass="header">Cod. Fornecedor</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.LIFNR}" />
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-12 col-sm-12 col-lg-12">
+							<div class="col-xs-12 col-sm-6 col-lg-6">
+								<div>
+									<h:panelGroup styleClass="header">Rua</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].STREET}" />
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">Número</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].HOUSENUM1}" />
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-lg-2">
+								<div>
+									<h:panelGroup styleClass="header">Bairro</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].CITY2}" />
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-12 col-sm-12 col-lg-12" style="margin-bottom: 20px;">
+							<div class="col-xs-6 col-sm-3 col-lg-3">
+								<div>
+									<h:panelGroup styleClass="header">CEP</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].POSTCODE1}" />
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-3 col-lg-3">
+								<div>
+									<h:panelGroup styleClass="header">Cidade</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].CITY1}" />
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-4 col-lg-4">
+								<div>
+									<h:panelGroup styleClass="header">Estado</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].REGION}" />
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-lg-2">
+								<div>
+									<h:panelGroup styleClass="header">País</h:panelGroup>
+								</div>
+								<div>
+									<h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEndereco[0].COUNTRY}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modalPopUpGroupField" style="margin-bottom: 20px;">
+						<h:panelGroup styleClass="headerGroup">
+								Dados Fiscais
+							</h:panelGroup>
+						<hr />
+
+
+						<div class="col-xs-12 col-sm-12 col-lg-12" style="margin-bottom: 20px;">
+							<div class="col-xs-12 col-sm-6 col-lg-6">
+								<div><h:panelGroup styleClass="header">CNPJ</h:panelGroup></div>
+								<div><p:outputLabel
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.STCD1}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.CNPJConverter" />
+									</p:outputLabel></div>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-lg-6">
+								<div><h:panelGroup styleClass="header">Inscrição Estadual</h:panelGroup></div>
+								<div><h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.STCD3}" /></div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="modalPopUpGroupField">
+						<h:panelGroup styleClass="headerGroup">
+								Dados Financeiros
+							</h:panelGroup>
+						<hr />
+						
+						
+						<div class="col-xs-12 col-sm-12 col-lg-12" style="margin-bottom: 20px;">
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div><h:panelGroup styleClass="header">Habilitados a Antecipar</h:panelGroup></div>
+								<div><h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEmpresariais[0].ZZATIVOANT eq 'X'? 'Sim':'Não'}" /></div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div><h:panelGroup styleClass="header">Taxa Praticada</h:panelGroup></div>
+								<div><h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEmpresariais[0].TXANT}" /></div>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-lg-4">
+								<div><h:panelGroup styleClass="header">Vencimento Mínimo (Dias)</h:panelGroup></div>
+								<div><h:outputText
+										value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosEmpresariais[0].DIASANT}" /></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modalPopUpGroupField">
+						<h:panelGroup styleClass="headerGroup">
+							Dados Bancários
+						</h:panelGroup>
+						<hr />
+						<p:dataTable var="dadosBancarios" id="gridDadosBancarios"
+							value="#{fornecedorDadosCadastraisBean.fornecedorSelecionado.dadosBancarios}"
+							rows="10" paginator="false" emptyMessage="#{msg.GridVazio}"
+							style="width:100%; text-align:left; background: transparent; border: none; border-collapse: inherit; "
+							tableStyle="border-collapse: inherit;">
+
+							<p:column headerText="Banco"
+								style="text-align:left; background: transparent; border: none;border-collapse: inherit;">
+								<h:outputText value="#{dadosBancarios.BANCO}" />
+							</p:column>
+
+							<p:column headerText="Agência"
+								style="text-align:left; background: transparent; border: none;border-collapse: inherit;">
+								<h:outputText value="#{dadosBancarios.AGENCIA}" />
+							</p:column>
+
+							<p:column headerText="Conta"
+								style="text-align:left; background: transparent; border: none;border-collapse: inherit;">
+								<h:outputText value="#{dadosBancarios.CONTA}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+	<ui:define name="footer">
+	</ui:define>
+</ui:composition>
+</html>

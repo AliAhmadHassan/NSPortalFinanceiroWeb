@@ -1,0 +1,716 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/fioriInterno.xhtml">
+	<ui:define name="header">
+	    Publicação Contas a Pagar
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form" name="form" prependId="false">
+			<p:spacer height="30px" />
+			<p:growl id="msgs" showDetail="true" />
+			<h:panelGroup>
+				<div class="gridFilter altura60">
+					<div class="modalPopUpGroupField">
+
+						<div class="col-xs-12 col-sm-10 col-lg-10">
+							<div class="col-xs-12 col-sm-3 col-lg-3">
+								<div>
+									<h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelLIFNR}" />
+									</h:panelGroup>
+								</div>
+								<div>
+									<h:inputText value="#{publicacaoBean.lifnr}" required="true"
+										requiredMessage="Campo de #{msg.LabelLIFNR} é Obrigatorio."
+										rendered="#{publicacaoBean.usuarioInterno}" />
+									<p:selectCheckboxMenu id="selectfornecedor"
+										value="#{publicacaoBean.lifnrSelecinado}"
+										rendered="#{not publicacaoBean.usuarioInterno}"
+										style="width:87%" title="Selecione CNPJ"
+										label="Selecione CNPJ">
+										<f:selectItems value="#{publicacaoBean.fornecedores}" />
+									</p:selectCheckboxMenu>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2 col-lg-2">
+								<div>
+									<h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelDataVencimento}" />
+									</h:panelGroup>
+									&nbsp;
+									<h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelDe}" />
+									</h:panelGroup>
+								</div>
+								<div>
+									<p:calendar id="CalDe"
+										value="#{publicacaoBean.dtSolicitacaoDe}" pattern="dd/MM/yyyy"
+										required="true" style="width:100%"
+										requiredMessage="Campo de #{msg.LabelDataSolicitacao} #{msg.LabelDe} é Obrigatorio.">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</p:calendar>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2 col-lg-2">
+								<div>
+									<h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelAte}" />
+									</h:panelGroup>
+								</div>
+								<div>
+									<p:calendar id="CalAte"
+										value="#{publicacaoBean.dtSolicitacaoAte}"
+										pattern="dd/MM/yyyy" required="true" style="width:100%"
+										requiredMessage="Campo de #{msg.LabelDataSolicitacao} #{msg.LabelAte} é Obrigatorio.">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</p:calendar>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3 col-lg-3">
+								<div>
+									<h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelStatus}" />
+									</h:panelGroup>
+								</div>
+								<div>
+									<p:selectOneMenu id="country" value="#{publicacaoBean.status}"
+										required="true"
+										requiredMessage="Campo de #{msg.LabelStatus} é Obrigatorio."
+										style="width:69%">
+										<f:selectItem itemLabel="Todos" itemValue="T"
+											noSelectionOption="false" />
+										<f:selectItem itemLabel="Em Aberto" itemValue="A"
+											noSelectionOption="false" />
+										<f:selectItem itemLabel="Pagos" itemValue="P"
+											noSelectionOption="false" />
+
+									</p:selectOneMenu>
+									<p:commandButton style="
+    position: relative;
+    top: -6px;
+    height: 23px;" icon="ui-icon-search"
+										update="@form" action="#{publicacaoBean.atualizaGrid}" />
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+			<p:outputPanel id="panelMyTable">
+				<div id="myTable" class="panelDataTabelPrincipal"
+					style="font-size: xx-small">
+					<div style="text-align: right; font-size: small">
+						<p:commandLink actionListener="#{menuPrincipalBean.menuClick}"
+							style="text-decoration: none">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/paymentIcon.png"
+								title="Solicitar Antecipação de Pagamento" />
+							<f:param name="urlMenu"
+								value="solicitacaoAcompanhamentoAntecipacaoFinanceira" />
+						</p:commandLink>
+						<p:spacer width="10" />
+
+						<h:commandLink action="#{publicacaoBean.downloadPlanilhaExcel}"
+							ajax="false">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/excel-icon32.png"
+								title="Exportar para o Excel" />
+						</h:commandLink>
+					</div>
+					<div class="panelDataTabelPrincipalBranco visible-xs">
+						<p:dataTable var="item" id="recordsTableMobile"
+							value="#{publicacaoBean.response}" sortBy="#{item.STATUS}">
+
+							<p:column headerText="#{msg.LabelStatus}" priority="1"
+								style="text-align:center;width:25px;">
+								<h:panelGroup rendered="#{item.STATUS eq '2'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/historicoA.png"
+										title="Pago" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{item.STATUS eq '1'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/historicoP.png"
+										title="Em Aberto" />
+								</h:panelGroup>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelNotaFiscal}" priority="1"
+								style="width:100px; text-align:right;">
+								<h:outputLabel value="#{item.XBLNR}" />&nbsp;
+							<p:commandButton rendered="#{not empty item.NOTA}"
+									update=":form:NotaPanelView" oncomplete="PF('dlgNota').show()"
+									icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelValorNotaFiscal}" priority="1"
+								style="width:70px;text-align:right;">
+								<h:outputLabel value="#{item.DMBTR}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column style="width:30px; text-align:center"
+								headerText="" priority="1" exportable="false">
+								<p:commandButton update=":form:panelDetalhes"
+									oncomplete="PF('dlgDetalhes').show()" icon="ui-icon-search"
+									title="View">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+
+
+							<p:summaryRow listener="#{publicacaoBean.calculateTotal}">
+								<p:column colspan="2"
+									style="text-align:right; background-color:lightgray;">
+									<h:outputText value="Total:" />
+								</p:column>
+
+								<p:column style="text-align:right; background-color:lightgray;">
+									<h:outputLabel value="#{publicacaoBean.totalDMBTR}">&nbsp;
+								<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;" />
+							</p:summaryRow>
+						</p:dataTable>
+					</div>
+
+
+					<div class="panelDataTabelPrincipalBranco hidden-xs">
+						<p:dataTable var="item" id="recordsTable"
+							value="#{publicacaoBean.response}" sortBy="#{item.STATUS}">
+
+							<p:column headerText="#{msg.LabelStatus}" priority="1"
+								style="text-align:center;width:30px;">
+								<h:panelGroup rendered="#{item.STATUS eq '2'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/historicoA.png"
+										title="Pago" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{item.STATUS eq '1'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/historicoP.png"
+										title="Em Aberto" />
+								</h:panelGroup>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelOperacao}" style="width:80px;"
+								priority="1">
+								<h:outputLabel value="#{item.OPERACAO}" />
+							</p:column>
+
+							<p:column headerText="#{msg.LabelCNPJ}" style="width:150px;">
+								<h:outputText value="#{item.cnpj}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.CNPJConverter" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelRazaoSocial}"
+								style="width:150px;">
+								<h:outputLabel value="#{item.NAME1}" />
+							</p:column>
+
+							<p:column headerText="#{msg.LabelNotaFiscal}" priority="1"
+								style="width:100px; text-align:right;">
+								<h:outputLabel value="#{item.XBLNR}" />&nbsp;
+							<p:commandButton rendered="#{not empty item.NOTA}"
+									update=":form:NotaPanelView" oncomplete="PF('dlgNota').show()"
+									icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelDtEmissao}" style="width:60px;">
+								<h:outputLabel value="#{item.BLDAT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelDataDocumento}"
+								style="width:60px;">
+								<h:outputLabel value="#{item.BUDAT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelValorNotaFiscal}" priority="1"
+								style="width:80px;text-align:right;">
+								<h:outputLabel value="#{item.DMBTR}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+
+
+
+
+							<p:column headerText="#{msg.LabelDescontoComerciais}"
+								style="width:80px;">
+								<h:outputLabel value="#{item.DESCCOMERCIAL}" />
+							</p:column>
+
+							<p:column headerText="IRF" style="width:80px; text-align:right">
+								<h:outputLabel value="#{item.IMPOSTOS}">&nbsp;
+								<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+
+								<p:commandButton rendered="#{not empty item.DOCSIMP}"
+									update=":form:ImpostosPanelView"
+									oncomplete="PF('dlgImpostos').show()" icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelValorCredito}"
+								style="width:80px; text-align:right">
+								<h:outputLabel value="#{item.DMBTRCRD}">&nbsp;
+								<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+
+								<p:commandButton rendered="#{not empty item.DMBTRCRD}"
+									update=":form:DocsPanelView" oncomplete="PF('dlgDocs').show()"
+									icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+							<p:column headerText="#{msg.LabelDataVencimento}"
+								style="width:60px;">
+								<h:outputLabel value="#{item.FAEDT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+							<p:column headerText="Data de Pagamento" style="width:60px;">
+								<h:outputLabel value="#{item.AUGDT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+
+							<p:column headerText="#{msg.LabelAntecipado}" style="width:60px;">
+								<h:outputLabel value="#{item.ANTECIPADO}" />
+							</p:column>
+
+
+							<p:column headerText="Comprovante"
+								style="width:80px; text-align:center">
+
+								<p:commandLink action="#{publicacaoBean.downloadComprovante}"
+									rendered="#{not empty item.NOMECOMPROVANTE}" ajax="false">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/report.png"
+										title="Comprovante de Pagamento" />
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandLink>
+								<br />
+								<h:outputLabel value="#{item.NOMECOMPROVANTE}" />
+							</p:column>
+
+							<p:column headerText="Ocorrência"
+								style="width:50px; text-align:center">
+								<p:commandLink update=":form:LogsPanelView"
+									oncomplete="PF('dlgLogs').show()"
+									style="text-decoration: none; "
+									rendered="#{not empty item.LOG}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/exclamation.png"
+										title="Log" />
+									<f:setPropertyActionListener value="#{item}"
+										target="#{publicacaoBean.selectedOneResponse}" />
+								</p:commandLink>
+
+							</p:column>
+
+							<p:column headerText="#{msg.LabelProcesso}" style="width:160px;">
+								<a href="#"><h:outputLabel value="#{item.cod}" /></a>
+							</p:column>
+
+							<p:summaryRow listener="#{publicacaoBean.calculateTotal}">
+								<p:column colspan="7"
+									style="text-align:right; background-color:lightgray;">
+									<h:outputText value="Total:" />
+								</p:column>
+
+								<p:column style="text-align:right; background-color:lightgray;">
+									<h:outputLabel value="#{publicacaoBean.totalDMBTR}">&nbsp;
+								<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;">
+
+								</p:column>
+
+								<p:column style="text-align:right; background-color:lightgray;">
+
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;">
+
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;">
+
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;">
+
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+							</p:summaryRow>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<p:dialog id="dlgDetalhes" closeOnEscape="true"
+				header="Detalhes" widgetVar="dlgDetalhes"
+				
+				resizable="false" modal="true">
+				<p:outputPanel id="panelDetalhes">
+					<h:panelGrid columns="2">
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelStatus}" />
+						<h:panelGroup>
+							<h:panelGroup rendered="#{publicacaoBean.selectedOneResponse.STATUS eq '2'}">
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/historicoA.png"
+									title="Pago" />
+							</h:panelGroup>
+							<h:panelGroup rendered="#{publicacaoBean.selectedOneResponse.STATUS eq '1'}">
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/historicoP.png"
+									title="Em Aberto" />
+							</h:panelGroup>
+						</h:panelGroup>
+
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelOperacao}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.OPERACAO}" />
+
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelCNPJ}" />
+						<h:outputText value="#{publicacaoBean.selectedOneResponse.cnpj}">
+							<f:converter
+								converterId="br.com.netshoes.nsPortFinanc.web.CNPJConverter" />
+						</h:outputText>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelRazaoSocial}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.NAME1}" />
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelNotaFiscal}" />
+						<h:panelGroup>
+							<h:outputLabel value="#{publicacaoBean.selectedOneResponse.XBLNR}" />&nbsp;
+								<p:commandButton rendered="#{not empty publicacaoBean.selectedOneResponse.NOTA}"
+								update=":form:NotaPanelView" oncomplete="PF('dlgNota').show()"
+								icon="ui-icon-search">
+								<f:setPropertyActionListener value="#{publicacaoBean.selectedOneResponse}"
+									target="#{publicacaoBean.selectedOneResponse}" />
+							</p:commandButton>
+						</h:panelGroup>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelDtEmissao}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.BLDAT}">
+							<f:converter
+								converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+						</h:outputLabel>
+						
+						<h:outputText style="font-weight: bold; margin-right:20px" value="#{msg.LabelDataDocumento}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.BUDAT}">
+							<f:converter
+								converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+						</h:outputLabel>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelValorNotaFiscal}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.DMBTR}">
+							<f:converter
+								converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+						</h:outputLabel>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelDescontoComerciais}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.DESCCOMERCIAL}" />
+						
+						<h:outputText style="font-weight: bold;" value="IRF" />
+						<h:panelGroup>
+							<h:outputLabel value="#{publicacaoBean.selectedOneResponse.IMPOSTOS}">&nbsp;
+									<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+							</h:outputLabel>
+							<p:commandButton rendered="#{not empty publicacaoBean.selectedOneResponse.DOCSIMP}"
+								update=":form:ImpostosPanelView"
+								oncomplete="PF('dlgImpostos').show()" icon="ui-icon-search">
+								<f:setPropertyActionListener value="#{publicacaoBean.selectedOneResponse}"
+									target="#{publicacaoBean.selectedOneResponse}" />
+							</p:commandButton>
+						</h:panelGroup>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelValorCredito}" />
+						<h:panelGroup>
+							<h:outputLabel value="#{publicacaoBean.selectedOneResponse.DMBTRCRD}">&nbsp;
+									<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+							</h:outputLabel>
+	
+							<p:commandButton rendered="#{not empty publicacaoBean.selectedOneResponse.DMBTRCRD}"
+								update=":form:DocsPanelView" oncomplete="PF('dlgDocs').show()"
+								icon="ui-icon-search">
+								<f:setPropertyActionListener value="#{publicacaoBean.selectedOneResponse}"
+									target="#{publicacaoBean.selectedOneResponse}" />
+							</p:commandButton>
+						</h:panelGroup>
+						
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelDataVencimento}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.FAEDT}">
+							<f:converter
+								converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+						</h:outputLabel>
+						
+						<h:outputText style="font-weight: bold;" value="Data de Pagamento" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.AUGDT}">
+							<f:converter
+								converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+						</h:outputLabel>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelAntecipado}" />
+						<h:outputLabel value="#{publicacaoBean.selectedOneResponse.ANTECIPADO}"/>
+						
+						<h:outputText style="font-weight: bold;" value="Comprovante" />
+						<h:panelGroup>
+							<p:commandLink action="#{publicacaoBean.downloadComprovante}"
+								rendered="#{not empty publicacaoBean.selectedOneResponse.NOMECOMPROVANTE}" ajax="false">
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/report.png"
+									title="Comprovante de Pagamento" />
+								<f:setPropertyActionListener value="#{publicacaoBean.selectedOneResponse}"
+									target="#{publicacaoBean.selectedOneResponse}" />
+							</p:commandLink>
+							<br />
+							<h:outputLabel value="#{publicacaoBean.selectedOneResponse.NOMECOMPROVANTE}" />
+						</h:panelGroup>
+						
+						<h:outputText style="font-weight: bold;" value="Ocorrência" />
+						<h:panelGroup>
+						<p:commandLink update=":form:LogsPanelView"
+							oncomplete="PF('dlgLogs').show()" style="text-decoration: none; "
+							rendered="#{not empty publicacaoBean.selectedOneResponse.LOG}">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/exclamation.png"
+								title="Log" />
+							<f:setPropertyActionListener value="#{publicacaoBean.selectedOneResponse}"
+								target="#{publicacaoBean.selectedOneResponse}" />
+						</p:commandLink>
+						</h:panelGroup>
+						
+						<h:outputText style="font-weight: bold;" value="#{msg.LabelProcesso}" />
+						<h:panelGroup>
+						<a href="#"><h:outputLabel value="#{publicacaoBean.selectedOneResponse.cod}" /></a>
+						</h:panelGroup>
+					</h:panelGrid>
+
+
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="dlgDocs" closeOnEscape="true"
+				header="#{msg.LabelDocumentos}" widgetVar="dlgDocs"
+				
+				resizable="false" modal="true">
+				<p:outputPanel id="DocsPanelView"
+					style="overflow-x: hidden; overflow-y: hidden;">
+					<p:dataTable var="doc"
+						value="#{publicacaoBean.selectedOneResponse.DOCSCRD}"
+						sortBy="#{doc.WAERS}">
+
+						<p:column headerText="Nota Fiscal Devolução"
+							style="width:170px;text-align:center">
+							<h:outputText value="#{doc.XBLNR}" />
+						</p:column>
+
+						<p:column headerText="#{msg.LabelDataLancamento}"
+							style="text-align:center"
+							rendered="#{publicacaoBean.usuarioInterno}">
+							<h:outputText value="#{doc.BLDAT}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelValorNotaCredito}"
+							style="text-align:right">
+							<h:outputLabel value="#{doc.DMBTR}">&nbsp;
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelProcessoCredito}"
+							style="width:180px;">
+							<h:outputText value="#{doc.BUKRS}" />/<h:outputText
+								value="#{doc.BELNR}" />/<h:outputText value="#{doc.BUZEI}" />/<h:outputText
+								value="#{doc.GJAHR}" />
+						</p:column>
+
+						<p:summaryRow>
+							<p:column colspan="#{publicacaoBean.usuarioInterno?6:3}"
+								style="text-align:right">
+								<h:outputText value="Total:" />
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputLabel value="#{publicacaoBean.totalDocsDMBTRCRD}">&nbsp;
+								<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+							<p:column />
+							<p:column rendered="#{publicacaoBean.usuarioInterno}" />
+						</p:summaryRow>
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="dlgNota" closeOnEscape="true" header="Nota Fiscal"
+				widgetVar="dlgNota" modal="true">
+				<p:outputPanel id="NotaPanelView"
+					style="overflow-x: hidden; overflow-y: hidden;">
+					<div class="ui-datatable ui-widget ui-datatable-scrollable">
+						<div class="ui-widget-header ui-datatable-scrollable-header"
+							style="width: 492px;">
+							<div class="ui-datatable-scrollable-header-box"
+								style="margin-right: 15px;">
+								<table role="grid">
+									<thead>
+										<tr role="row">
+											<th class="ui-state-default" role="columnheader"
+												style="text-align: center; font-size: x-small;"><span
+												class="ui-column-title">Número Nota</span></th>
+											<th id="gridSolicitacao:j_idt104" class="ui-state-default"
+												role="columnheader"
+												style="text-align: center; font-size: x-small;"><span
+												class="ui-column-title">Total</span></th>
+										</tr>
+										<tr data-ri="0" class="ui-widget-content ui-datatable-even"
+											role="row">
+											<td role="gridcell"><h:outputText
+													value="#{publicacaoBean.selectedOneResponse.NOTA.nota}" /></td>
+											<td role="gridcell" style="text-align: right;"><h:outputText
+													value="#{publicacaoBean.selectedOneResponse.NOTA.total}">
+													<f:converter
+														converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+												</h:outputText></td>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="dlgLogs" closeOnEscape="true"
+				header="#{msg.LabelDocumentos}" widgetVar="dlgLogs">
+				<p:outputPanel id="LogsPanelView"
+					style="overflow-x: hidden; overflow-y: hidden;">
+					<p:dataTable var="doc"
+						value="#{publicacaoBean.selectedOneResponse.LOG}">
+
+						<p:column headerText="#{msg.LabelStatus}"
+							style="width:50px; text-align:center">
+							<h:outputText value="#{doc.status}" />
+						</p:column>
+
+						<p:column headerText="Descrição">
+							<h:outputText value="#{doc.descricao}" />
+						</p:column>
+
+						<p:column headerText="#{msg.LabelData}"
+							style="width:150px; text-align:center">
+							<h:outputText value="#{doc.data}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+							</h:outputText>
+						</p:column>
+
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="dlgImpostos" closeOnEscape="true" header="Impostos"
+				widgetVar="dlgImpostos" modal="true">
+				<p:outputPanel id="ImpostosPanelView"
+					style="overflow-x: hidden; overflow-y: hidden;">
+					<p:dataTable var="doc"
+						value="#{publicacaoBean.selectedOneResponse.DOCSIMP}">
+
+						<p:column headerText="Impostos" style="text-align:left;">
+							<h:outputText value="#{doc.IMPOSTO}" />
+							<f:facet name="footer">
+								<h:outputText style="font-weight: bold;" value="Total:" />
+							</f:facet>
+						</p:column>
+
+						<p:column headerText="Base" style="width:180px; text-align:right;">
+							<h:outputText value="#{doc.aliquota}" />
+						</p:column>
+
+						<p:column headerText="Base" style="width:180px; text-align:right;">
+							<h:outputText value="#{doc.BASE}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Montante"
+							style="width:180px; text-align:right;">
+							<h:outputText value="#{doc.MONTANTE}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+							</h:outputText>
+							<f:facet name="footer">
+								<h:outputLabel value="#{publicacaoBean.totalImpostoMontante}"
+									style="font-weight: bold;">&nbsp;
+								<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</f:facet>
+						</p:column>
+
+
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+	<ui:define name="footer">
+	</ui:define>
+</ui:composition>
+</html>

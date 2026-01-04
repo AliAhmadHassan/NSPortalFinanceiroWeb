@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:tufn="http://netshoes.com/facelets">
+
+<ui:composition template="templates/master.xhtml">
+	<ui:define name="content">
+		<div id="login" align="center">
+			<table>
+				<tbody>
+					<tr>
+						<td><b>Operador / Ramal</b></td>
+					</tr>
+					<tr>
+						<td title="Informe o seu usuário ou ramal"><p:inputText
+								id="txtUsuario" type="text" value="#{hello.txtUsuario}" /></td>
+					</tr>
+					<tr>
+						<td><b>Senha</b></td>
+					</tr>
+					<tr>
+						<td title="Informe sua senha"><p:inputText id="txtSenha"
+								name="txtSenha" type="password" value="#{hello.txtSenha}" /></td>
+					</tr>
+					<tr>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<button type="submit" value="Entrar" name="btnEntrar"
+								id="btnEntrar">Entrar</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

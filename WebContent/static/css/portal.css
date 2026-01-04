@@ -1,0 +1,138 @@
+html {
+	clear: both;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	font-family: 'Trebuchet MS';
+	font-size: 13px;
+	border-radius: 10px;
+	height: 230px;
+	background-image: url("../../static/images/bg18.jpg");
+	/*background-color: #d2d2d2;
+	background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+	background-position: 15px 15px;
+	background-image: linear-gradient(rgba(255, 255, 255, .3) 1px,
+		transparent 1px), linear-gradient(0, rgba(255, 255, 255, .3) 1px,
+		transparent 1px), linear-gradient(rgba(255, 255, 255, .1) 1px,
+		transparent 1px), linear-gradient(0, rgba(255, 255, 255, .1) 1px,
+		transparent 1px);
+	background-image: -webkit-linear-gradient(rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -webkit-linear-gradient(0, rgba(255, 255, 255, .3)
+		1px, transparent 1px), -webkit-linear-gradient(rgba(255, 255, 255, .1)
+		1px, transparent 1px),
+		-webkit-linear-gradient(0, rgba(255, 255, 255, .1) 1px, transparent
+		1px);
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -moz-linear-gradient(0, rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -moz-linear-gradient(rgba(255, 255, 255, .1) 1px,
+		transparent 1px), -moz-linear-gradient(0, rgba(255, 255, 255, .1) 1px,
+		transparent 1px);
+	background-image: -ms-linear-gradient(rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -ms-linear-gradient(0, rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -ms-linear-gradient(rgba(255, 255, 255, .1) 1px,
+		transparent 1px), -ms-linear-gradient(0, rgba(255, 255, 255, .1) 1px,
+		transparent 1px);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -o-linear-gradient(0, rgba(255, 255, 255, .3) 1px,
+		transparent 1px), -o-linear-gradient(rgba(255, 255, 255, .1) 1px,
+		transparent 1px), -o-linear-gradient(0, rgba(255, 255, 255, .1) 1px,
+		transparent 1px);*/
+}
+
+#header {
+	margin: 0px;
+	top: 0px;
+	margin-left: 0px;
+	width: 100%;
+	height: 88px;
+	background-image: url("../../static/images/header_bg.png");
+	background-repeat: repeat-x;
+	z-index: 20;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 37px;
+	margin-bottom: 0px;
+	background-color: #efefef;
+	border: 1px solid #afafaf;
+	background-image: url("../../static/images/footer_bg.png");
+	background-repeat: repeat-x;
+	text-align: center;
+	line-height: 37px;
+	color: #333333;
+	font-weight: bold;
+}
+
+#login {
+	width: 510px;
+	height: 310px;
+	position: absolute;
+	margin-left: -251px;
+	margin-top: -131px;
+	left: 50%;
+	top: 50%;
+	background-image: url("../../static/images/login_out.png");
+	color: #555555;
+	text-align: center;
+	opacity: 0.85;
+	-moz-opacity: 0.85;
+	filter: alpha(opacity = 85);
+}
+
+#login table {
+	text-align: left;
+	width: 94%;
+	margin-top: 80px;
+	margin-left: 15px;
+}
+
+#login input {
+	width: 98%;
+	border: 1px solid #efefef;
+	padding: 5px;
+	text-align: left;
+}
+
+#login input[type=text]:hover {
+	border: 1px solid #1A62D9;
+	font-weight: bolder;
+}
+
+#login input[type=password]:hover {
+	border: 1px solid #1A62D9;
+	font-weight: bolder;
+}
+
+#login input[type=button] {
+	width: 80px;
+	height: 35px;
+	border: 1px solid #efefef;
+	padding: 5px;
+}
+
+#btnEntrar {
+	background-color: #ffffff;
+	height: 35px;
+	width: 101%;
+	border: 1px solid #afafaf;
+}
+
+#btnEntrar:hover {
+	background-color: #1A62D9;
+	cursor: pointer;
+	color: #ffffff;
+	font-weight: bold;
+}

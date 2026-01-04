@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/static/css/fioriLogin.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/static/css/fioriLogin.css?v=#{initParam['build']}" />
+	<link rel="shortcut icon"
+		href="#{facesContext.externalContext.requestContextPath}/static/images/netshoesN.png" />
+</h:head>
+<h:body class="sapUiBody">
+	<h:messages />
+	<h:form id="form">
+	<p:dialog id="ajaxStatus" widgetVar="ajaxStatus" modal="true"
+					closable="false" draggable="false" resizable="false" style="visibility: hidden; cursor: progress;">
+					<img
+						src="#{facesContext.externalContext.requestContextPath}/static/images/carregandoAguarde.gif" />
+				</p:dialog>
+				
+		<p:growl id="msgs" showDetail="true" />
+		<div id="login">
+										<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/aevee.png" />
+			<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+				<h:outputText class="sapMLabel" value="#{msg.LabelUsuario}"
+					style="width:130px;" />
+				<div class="sapMInputBase">
+					<p:inputText id="txtLogin" value="#{usuarioBean.txtUsuario}"
+						class="sapMInputBaseInner" style="width:240px;" required="true"
+						requiredMessage="Campo #{msg.LabelUsuario} Obrigatorio." />
+				</div>
+			</div>
+
+			<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+				<h:outputText class="sapMLabel" value="#{msg.LabelCodValidacao}"
+					style="width:130px;" />
+				<div class="sapMInputBase">
+					<p:inputText id="txtCodAlteraSenha"
+						value="#{usuarioBean.codAlteraSenha}" class="sapMInputBaseInner"
+						style="width:240px;" required="true"
+						requiredMessage="Campo #{msg.LabelCodValidacao} Obrigatorio." />
+				</div>
+			</div>
+
+			<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+				<h:outputText class="sapMLabel" value="#{msg.LabelSenha}"
+					style="width:130px;" />
+				<div class="sapMInputBase">
+					<p:inputText id="txtSenha" type="password"
+						value="#{usuarioBean.txtSenha}" class="sapMInputBaseInner"
+						style="width:240px;" required="true"
+						requiredMessage="Campo #{msg.LabelSenha} Obrigatorio." />
+				</div>
+			</div>
+			<div class="sapMBar sapMPanelBG sapUiSraLoginHidden">
+				<h:outputText class="sapMLabel" value="#{msg.LabelRepete}"
+					style="width:130px;" />
+				<div class="sapMInputBase">
+					<p:inputText id="txtRepeteSenha" type="password"
+						value="#{usuarioBean.txtRepeteSenha}" class="sapMInputBaseInner"
+						style="width:240px;" required="true"
+						requiredMessage="Campo #{msg.LabelRepete} Obrigatorio." />
+				</div>
+			</div>
+
+			<div class="sapMPanelBtn">
+				<p:commandButton id="btnAlterar" value="#{msg.btnModificarSenha}"
+					update=":form:msgs" class="sapMBtnContent blue" onclick="PF('ajaxStatus').show()"
+					action="#{usuarioBean.alteraSenha}">
+				</p:commandButton>
+
+			</div>
+		</div>
+		<div class="sapUiSraFooter">
+<div class="sapUiSraLoginLogo" style="top:-30px;">
+				<img
+					src="#{facesContext.externalContext.requestContextPath}/static/images/aevee.png"
+					style="height: 100px;" />
+			</div>
+			<div class="sapUiSraLoginCopyright">
+				<h:outputText value="#{msg.LabelFooter}"></h:outputText>
+			</div>
+		</div>
+	</h:form>
+</h:body>
+</html>

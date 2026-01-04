@@ -1,0 +1,767 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/fioriInterno.xhtml">
+	<ui:define name="header">
+	    Solicitar Antecipação
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form" name="form" prependId="false">
+
+
+			<p:spacer height="30px" />
+			<p:growl id="msgs" showDetail="true" sticky="true" />
+
+
+			<h:panelGroup
+				rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.usuarioInterno}">
+				<div class="gridFilter">
+
+					<div class="modalPopUpGroupField">
+						<table>
+							<tr>
+								<td><h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelLIFNR}" />
+									</h:panelGroup></td>
+								<td><h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelEmpr}" />
+									</h:panelGroup></td>
+								<td><p:spacer /></td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<td><h:inputText
+										value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.lifnr}" />
+								</td>
+								<td><h:inputText
+										value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.empr}" />
+								</td>
+								<td><p:commandButton id="btnSearch" icon="ui-icon-search" update="@form" style="height:26px"
+										action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.atualizaGrid}" />
+								</td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</h:panelGroup>
+
+			<h:panelGroup
+				rendered="#{not solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.usuarioInterno}">
+				<div class="gridFilter">
+
+					<div class="modalPopUpGroupField">
+						<table>
+							<tr>
+								<td><h:panelGroup styleClass="header">
+										<h:outputText value="#{msg.LabelLIFNR}" />
+									</h:panelGroup></td>
+								<td><p:spacer /></td>
+								<td style="font-size: small;"></td>
+								<td><h:panelGroup styleClass="header">
+										Total das Notas Selecionadas <h:inputText id="opcaoId"
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.opcaoSelecionada}"
+											style="visibility: hidden; width:10px" />
+									</h:panelGroup></td>
+							</tr>
+
+							<tr>
+								<td width="10%" style="vertical-align: top"><p:selectCheckboxMenu
+										id="selectfornecedor"
+										value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.lifnrSelecinado}"
+										style="width:250px" title="Selecione CNPJ"
+										label="Selecione CNPJ">
+										<f:selectItems
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.fornecedores}" />
+									</p:selectCheckboxMenu> <br /> <br />
+									<div style="font-size: small;">
+										<b>Títulos Aptos a Antecipar : </b>
+										<h:outputLabel
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.titulosAptosAntecipar}" />
+										<br /> <b>Montante dos Títulos : </b>
+										<h:outputLabel
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.montanteTitulos}">
+											<f:converter
+												converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+										</h:outputLabel>
+									</div></td>
+								<td width="5%" style="vertical-align: top"><p:commandButton
+										icon="ui-icon-search" update="@form" style="height:26px"
+										action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.atualizaGrid}" />
+								</td>
+								<td width="35%"
+									style="font-size: small; vertical-align: top; min-width: 250px;">
+
+								</td>
+								<td width="60%"><p:outputPanel id="ResumoNotasSelecionadas">
+										<div class="ui-datatable ui-widget ui-datatable-scrollable">
+											<div class="ui-widget-header ui-datatable-scrollable-header">
+												<div class="ui-datatable-scrollable-header-box"
+													style="margin-right: 15px;">
+													<table role="grid">
+														<thead>
+															<tr role="row">
+																<th class="ui-state-default" role="columnheader"
+																	style="text-align: center; width: 5px; font-size: x-small;"></th>
+																<th id="gridSolicitacao:j_idt104"
+																	class="ui-state-default" role="columnheader"
+																	style="text-align: center; width: 99px; font-size: x-small;">
+																	<span class="ui-column-title">Data de
+																		Antecipação</span>
+																</th>
+																<th id="gridSolicitacao:j_idt104"
+																	class="ui-state-default" role="columnheader"
+																	style="text-align: right; width: 99px; font-size: x-small;">
+																	<span class="ui-column-title">Valor Bruto</span>
+																</th>
+																<th id="gridSolicitacao:j_idt107"
+																	class="ui-state-default" role="columnheader"
+																	style="text-align: right; width: 99px; font-size: x-small;">
+																	<span class="ui-column-title">Valor Devolução</span>
+																</th>
+																<th id="gridSolicitacao:j_idt110"
+																	class="ui-state-default" role="columnheader"
+																	style="text-align: right; width: 99px; font-size: x-small;">
+																	<span class="ui-column-title">Valor Juros
+																		Antecipação</span>
+																</th>
+																<th id="gridSolicitacao:j_idt114"
+																	class="ui-state-default" role="columnheader"
+																	style="text-align: right; width: 99px; font-size: x-small;">
+																	<span class="ui-column-title">Valor Líquido
+																		Antecipação</span>
+																</th>
+															</tr>
+															<tr>
+																<td><input type="radio" checked="checked"
+																	id="Opcao" name="Opcao" value="1"
+																	onchange="alteraOpcao(this)" /></td>
+																<td style="background-color: white; text-align: center;"
+																	class="Opcao1"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasDataAnteciopacao}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao1"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasValorNotaFiscal}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao1"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasValorDevolucao}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao1"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasValorJurosAntecipacao}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao1"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasValorLiquidoAntecipacao}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+															</tr>
+															<tr>
+																<td><h:panelGroup
+																		rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoDataAnteciopacao!=null}">
+																		<input type="radio" id="Opcao" name="Opcao" value="2"
+																			onchange="alteraOpcao(this)" />
+																	</h:panelGroup></td>
+																<td style="background-color: white; text-align: center;"
+																	class="Opcao2"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoDataAnteciopacao}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao2"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoValorNotaFiscal}"
+																		rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoDataAnteciopacao!=null}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao2"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoValorDevolucao}"
+																		rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoDataAnteciopacao!=null}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao2"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoValorJurosAntecipacao}"
+																		rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoDataAnteciopacao!=null}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+
+																<td style="background-color: white; text-align: right;"
+																	class="Opcao2"><h:outputLabel
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoValorLiquidoAntecipacao}"
+																		rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.notasSelecionadasRecalculoDataAnteciopacao!=null}">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+																	</h:outputLabel></td>
+															</tr>
+															<tr>
+																<td colspan="5"><span
+																	style="font-size: font-size: 1em; font-weight: bold;">Data
+																		Agendamento: </span> <p:calendar
+																		value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.novaDataAnteciopacao}"
+																		pattern="dd/MM/yyyy">
+																		<f:converter
+																			converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+																	</p:calendar> <p:commandButton value="Atualizar valores"
+																		action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.recalculo}"
+																		style="font-weight:bold" update="@form" /> <p:commandButton
+																		icon="ui-icon-refresh"
+																		actionListener="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.desSelecionaTudo}"
+																		update="@form" title="Limpar" /></td>
+																<td colspan="2" style="text-align: right;"><p:commandButton
+																		style="font-weight:bold" update=":form:dlgConfirmacao"
+																		value="Solicitar Antecipação"
+																		action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.preparaTelaAceite}"
+																		oncomplete="PF('dlgConfirmacao').show()" /></td>
+															</tr>
+														</thead>
+													</table>
+												</div>
+											</div>
+										</div>
+
+
+
+
+									</p:outputPanel></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</h:panelGroup>
+			<p:outputPanel id="panelMyTable">
+
+				<div id="myTable" class="panelDataTabelPrincipal"
+					style="font-size: xx-small">
+					<div style="text-align: right; font-size: small">
+						<h:commandLink
+							action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.downloadPlanilhaExcel}"
+							ajax="false">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/excel-icon32.png"
+								title="Exportar para o Excel" />
+						</h:commandLink>
+					</div>
+					<div class="panelDataTabelPrincipalBranco">
+
+
+						<p:dataTable id="gridSolicitacao" var="item"
+							value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.response}"
+							selection="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedResponse}"
+							rowKey="#{item.cod}" rowSelectMode="checkbox" scrollable="true"
+							scrollHeight="400" scrollWidth="100%" sortBy="#{item.ordem}"
+							onRowSelected="solicitarAntecipacao.disabled='false'">
+
+							<p:ajax event="rowSelectCheckbox"
+								listener="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.limpaSelectedResponseRecalculado}"
+								update="@form" />
+							<p:ajax event="rowUnselectCheckbox"
+								listener="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.limpaSelectedResponseRecalculado}"
+								update="@form" />
+
+
+
+							<p:column selectionMode="multiple"
+								disabledSelection="#{item.STATUS ne 'AA'}"
+								styleClass="#{item.STATUS ne 'AA' ? 'selectionDisabled':''}"
+								style="width:60px; text-align:center;">
+
+								<f:facet name="header">
+									<p:commandButton value="Marcar Todos"
+										rendered="#{empty solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedResponse}"
+										action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selecionaTudo}"
+										update="@form" />
+									<p:commandButton value="Desmarcar Todos"
+										rendered="#{not empty solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedResponse}"
+										action="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.desSelecionaTudo}"
+										update="@form" />
+								</f:facet>
+							</p:column>
+
+
+
+							<p:column headerText="#{msg.LabelStatus}"
+								style="text-align:center;width:30px;">
+								<h:panelGroup rendered="#{item.STATUS eq 'BD'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/solicitacaoBD.png"
+										title="#{msg.LabelBD}" height="16px;" />
+								</h:panelGroup>
+
+								<h:panelGroup rendered="#{item.STATUS eq 'BK'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/solicitacaoBK.png"
+										title="#{msg.LabelBK}" height="16px;" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{item.STATUS eq 'DD'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/solicitacaoBK.png"
+										title="#{msg.LabelBK}" height="16px;" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{item.STATUS eq 'GR'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/solicitacaoBK.png"
+										title="#{msg.LabelBK}" height="16px;" />
+								</h:panelGroup>
+								<h:panelGroup rendered="#{item.STATUS eq 'AA'}">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/solicitacaoAA.png"
+										title="#{msg.LabelAA}" height="16px;" />
+								</h:panelGroup>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelOperacao}" style="width:60px;">
+								<h:outputLabel value="#{item.OPERACAO}" />
+							</p:column>
+
+							<p:column headerText="#{msg.LabelCNPJ}" style="width:150px;">
+								<h:outputText value="#{item.cnpj}"  >
+							<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.CNPJConverter" />
+							</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelRazaoSocial}"
+								style="width:150px;">
+								<h:outputLabel value="#{item.NAME1}" />
+							</p:column>
+
+
+
+							<p:column headerText="#{msg.LabelNotaFiscal}"
+								style="width:100px;">
+								<h:outputLabel value="#{item.XBLNR}" />
+							</p:column>
+
+							<p:column headerText="#{msg.LabelDtEmissao}" style="width:60px;">
+								<h:outputLabel value="#{item.BLDAT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelDataDocumento}"
+								style="width:60px;">
+								<h:outputLabel value="#{item.BUDAT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelValorNotaFiscal}"
+								style="width:80px; text-align:right;">
+								<h:outputLabel value="#{item.DMBTR}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="IRF" style="width:80px; text-align:right">
+								<p:commandButton rendered="#{not empty item.DOCSIMP}"
+									update=":form:ImpostosPanelView"
+									oncomplete="PF('dlgImpostos').show()" icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelTaxaMes}" style="width:50px;">
+								<h:outputLabel value="#{item.TXANTM}">
+									<f:convertNumber pattern="0.00000" />
+								</h:outputLabel>
+							</p:column>
+
+
+
+							<p:column headerText="#{msg.LabelDescontoComerciais}"
+								style="width:80px;">
+								<h:outputLabel value="#{item.DESCCOMERCIAL}" />
+							</p:column>
+
+
+
+
+							<p:column headerText="#{msg.LabelValorCredito}"
+								style="width:80px; text-align:right">
+								<h:outputLabel value="#{item.DMBTRCRD}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+								<p:commandButton rendered="#{not empty item.DMBTRCRD}"
+									update=":form:DocsPanelView" oncomplete="PF('dlgDocs').show()"
+									icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+
+
+
+
+
+
+
+
+
+							<p:column headerText="#{msg.LabelDataVencimento}"
+								style="width:60px;">
+								<h:outputLabel value="#{item.FAEDT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelDataAntecipacao}"
+								style="width:60px;">
+								<h:outputLabel value="#{item.DTANTFIN}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelValorJurosAntecipacao}"
+								style="width:80px; text-align:right;">
+								<h:outputLabel value="#{item.VLRJRANT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelValorLiquidoAntecipacao}"
+								style="width:80px; text-align:right;">
+								<h:outputLabel value="#{item.VLRLIQANT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg.LabelProcesso}" style="width:160px;">
+								<a href="#"><h:outputLabel value="#{item.cod}" /></a>
+							</p:column>
+
+
+							<p:summaryRow
+								listener="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.calculateTotal}">
+								<p:column
+									colspan="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.usuarioInterno ?10:8}"
+									style="text-align:right; background-color:lightgray;">
+									<h:outputText value="Total:" />
+								</p:column>
+
+								<p:column style="text-align:right; background-color:lightgray;">
+									<h:outputLabel
+										value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.totalDMBTR}">&nbsp;
+								<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+
+								<p:column style="text-align:right; background-color:lightgray;">
+									<h:outputLabel
+										value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.totalVLRLIQANT}">&nbsp;
+								<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+								<p:column style="text-align:right; background-color:lightgray;"></p:column>
+							</p:summaryRow>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:outputPanel>
+			<p:dialog id="dlgDocs" closeOnEscape="true"
+				header="#{msg.LabelDocumentos}" widgetVar="dlgDocs"
+				style="overflow-x: hidden; overflow-y: hidden;" width="1150"
+				resizable="false" modal="true">
+				<p:outputPanel id="DocsPanelView"
+					style="overflow-x: hidden; overflow-y: hidden;">
+					<p:dataTable var="doc"
+						value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedOneResponse.DOCSCRD}"
+						sortBy="#{doc.WAERS}">
+
+
+						<p:column headerText="Nota Fiscal Devolução"
+							style="width:170px;text-align:center">
+							<h:outputText value="#{doc.XBLNR}" />
+						</p:column>
+
+						<p:column headerText="#{msg.LabelDataDocumento}"
+							style="text-align:center">
+							<h:outputText value="#{doc.BLDAT}">
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelValorNotaCredito}"
+							style="text-align:right">
+							<h:outputLabel value="#{doc.DMBTR}">&nbsp;
+								<f:converter
+									converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+							</h:outputLabel>
+						</p:column>
+
+												<p:column headerText="#{msg.LabelProcessoCredito}"
+							style="width:180px;">
+							<h:outputText value="#{doc.BUKRS}" />/<h:outputText
+								value="#{doc.BELNR}" />/<h:outputText value="#{doc.BUZEI}" />/<h:outputText
+								value="#{doc.GJAHR}" />
+						</p:column>
+						
+
+						<p:summaryRow>
+							<p:column
+								colspan="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.usuarioInterno?6:3}"
+								style="text-align:right">
+								<h:outputText value="Total:" />
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputLabel
+									value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.totalDocsDMBTRCRD}">&nbsp;
+								<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+								</h:outputLabel>
+							</p:column>
+							<p:column />
+							<p:column
+								rendered="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.usuarioInterno}" />
+						</p:summaryRow>
+
+					</p:dataTable>
+				</p:outputPanel>
+			</p:dialog>
+			<p:dialog id="dlgConfirmacao" closeOnEscape="true"
+				header="#{msg.LabelConfirmar}" widgetVar="dlgConfirmacao"
+				style="overflow-x: hidden; max-width:1300px; " resizable="false"
+				modal="true">
+				<p:outputPanel id="SolicitacaoConfirmacao">
+					<p:outputPanel id="SolicitacaoConfirmacaoSel"
+						style="overflow-x: hidden; overflow-y: hidden;"
+						rendered="#{not empty solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedResponseParaAgendar}">
+						<p:outputPanel style="overflow-x: hidden; overflow-y: auto;">
+							<p:dataTable var="item"
+								value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedResponseParaAgendar}"
+								sortBy="#{item.WAERS}" scrollHeight="400" scrollWidth="1290"
+								style="max-Height:525px">
+
+
+								<p:column headerText="#{msg.LabelNotaFiscal}"
+									style="width:90px;">
+									<h:outputLabel value="#{item.XBLNR}" />
+								</p:column>
+								<p:column headerText="#{msg.LabelDtEmissao}" style="width:70px;">
+								<h:outputLabel value="#{item.BLDAT}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</h:outputLabel>
+							</p:column>
+							
+							<p:column headerText="#{msg.LabelDataVencimento}"
+									style="width:70px;">
+									<h:outputLabel value="#{item.FAEDT}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputLabel>
+								</p:column>
+								
+								<p:column headerText="#{msg.LabelDataAntecipacao}"
+									style="width:70px;">
+									<h:outputLabel value="#{item.DTANTFIN}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputLabel>
+								</p:column>
+								
+								<p:column headerText="#{msg.LabelTaxaMes}" style="width:50px;">
+									<h:outputLabel value="#{item.TXANTM}">
+										<f:convertNumber pattern="0.00000" />
+									</h:outputLabel>
+								</p:column>
+								
+								<p:column headerText="#{msg.LabelValorNotaFiscal}"
+									style="text-align:right; width:100px;">
+									<h:outputLabel value="#{item.DMBTR}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+								
+								<p:column headerText="IRF" style="width:100px; text-align:right">
+								<p:commandButton rendered="#{not empty item.DOCSIMP}"
+									update=":form:ImpostosPanelView"
+									oncomplete="PF('dlgImpostos').show()" icon="ui-icon-search">
+									<f:setPropertyActionListener value="#{item}"
+										target="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedOneResponse}" />
+								</p:commandButton>
+							</p:column>
+								
+								<p:column headerText="#{msg.LabelDescontoComerciais}"
+								style="width:70px;">
+								<h:outputLabel value="#{item.DESCCOMERCIAL}" />
+							</p:column>
+								
+								
+								
+								
+								
+
+
+								
+
+								
+
+								<p:column headerText="#{msg.LabelValorCredito}"
+									style="width:100px; text-align:right">
+									<h:outputLabel value="#{item.DMBTRCRD}">&nbsp;
+								<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg.LabelValorJurosAntecipacao}"
+									style="width:100px; text-align:right;">
+									<h:outputLabel value="#{item.VLRJRANT}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg.LabelValorLiquidoAntecipacao}"
+									style="text-align:right; width:100px;">
+									<h:outputLabel value="#{item.VLRLIQANT}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+									</h:outputLabel>
+								</p:column>
+
+
+								<p:column headerText="#{msg.LabelProcesso}" style="width:160px;">
+									<h:outputLabel value="#{item.cod}" />
+								</p:column>
+
+								<p:summaryRow>
+									<p:column colspan="5"
+										style="text-align:right;  background-color:lightgray;">
+										<h:outputText value="Total:" />
+									</p:column>
+
+									<p:column
+										style="text-align:right;  background-color:lightgray;">
+										<h:outputLabel
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.totalConfirmacaoDMBTR}">&nbsp;
+								<f:converter
+												converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+										</h:outputLabel>
+									</p:column>
+
+									<p:column
+										style="text-align:right;  background-color:lightgray;">
+										
+									</p:column>
+									<p:column
+										style="text-align:right;  background-color:lightgray;">
+										
+									</p:column>
+									<p:column
+										style="text-align:right;  background-color:lightgray;">
+										
+									</p:column>
+
+									<p:column
+										style="text-align:right;  background-color:lightgray;">
+										<h:outputLabel
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.totalConfirmacaoVLRJRANT}">&nbsp;
+								<f:converter
+												converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+										</h:outputLabel>
+									</p:column>
+
+								
+
+									<p:column
+										style="text-align:right;  background-color:lightgray;">
+										<h:outputLabel
+											value="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.totalConfirmacaoVLRLIQANT}">&nbsp;
+								<f:converter
+												converterId="br.com.netshoes.nsPortFinanc.web.MoneyConverter" />
+										</h:outputLabel>
+									</p:column>
+<p:column
+										style="text-align:right;  background-color:lightgray;">
+										
+									</p:column>
+								</p:summaryRow>
+
+							</p:dataTable>
+						</p:outputPanel>
+						<div style="width: 100%; text-align: right">
+							<p:spacer height="10" />
+							<p:commandButton value="#{msg.LabelSalvar}" style="width:100%"
+								onclick="PF('dlgConfirmacao').hide()"
+								oncomplete="PF('dlgMensagemAceite').show()" />
+						</div>
+					</p:outputPanel>
+
+					<p:outputPanel id="SolicitacaoConfirmacaoNSel"
+						rendered="#{empty solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.selectedResponse}">
+					Selecionar ao menos um título.
+				</p:outputPanel>
+				</p:outputPanel>
+			</p:dialog>
+			<p:dialog id="dlgMensagemAceite" closeOnEscape="true"
+				header="#{msg.LabelConfirmar}" widgetVar="dlgMensagemAceite"
+				style="overflow-x: hidden; overflow-y: hidden;" width="500"
+				resizable="false" modal="true">
+				<p:outputPanel>
+					<b>IMPORTANTE:</b> Com base na sua confirmação, será enviada uma proposta formal de solicitação de antecipação do seu (s) recebível (eis) a célula financeira do Aevee, que pode ou não ser aceita e efetivada. Vale ressaltar, que uma vez confirmado, o processo de antecipação não pode ser cancelado. O valor da operação é composto do valor original do documento, deduzido de eventuais descontos praticados. Deseja proceder com a Antecipação?
+					<br />
+					<br />
+					<div>
+						<center>
+							<p:commandButton value="#{msg.LabelAceito}"
+								actionListener="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.solicitacaoAceito}"
+								oncomplete=":form" update=":form" />
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<p:commandButton value="#{msg.LabelNaoAceito}"
+								actionListener="#{solicitacaoAcompanhamentoAntecipacaoFinanceiraBean.solicitacaoNaoAceito}"
+								onclick="PF('dlgMensagemAceite').hide()" update=":form:msgs" />
+						</center>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+	<ui:define name="footer">
+	</ui:define>
+</ui:composition>
+</html>

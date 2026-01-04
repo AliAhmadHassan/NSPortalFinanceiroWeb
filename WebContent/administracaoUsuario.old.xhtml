@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/fioriInterno.xhtml">
+	<ui:define name="header">
+		 Administração de Usuários
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="form" name="form" prependId="false">
+
+			<p:spacer height="30px" />
+			<c:set var="tipoUsuario" value="UI" />
+			<c:if test="#{administracaoUsuarioBean.usuario.USTYP == tipoUsuario}">
+				<div class="gridFilter">
+					<table width="100%">
+						<tr>
+							<th><p:outputLabel value="#{msg.LabelFornecedor}" /></th>
+							<th></th>
+						</tr>
+						<tr>
+							<td><p:inputText value="#{administracaoUsuarioBean.LIFNR}" /></td>
+							<td style="width: 100%"><p:commandLink
+									action="#{administracaoUsuarioBean.atualizaGrid}"
+									update="@form">
+									<img
+										src="#{facesContext.externalContext.requestContextPath}/static/images/StartMenuSearchicon.png"
+										style="height: 22px;" />
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</c:if>
+			<p:growl id="msgs" showDetail="true" />
+			<div class="panelDataTabelPrincipal">
+
+				<div class="panelDataTabelPrincipalBranco">
+					<p:dataTable var="user" value="#{administracaoUsuarioBean.users}"
+						editable="true">
+
+						<p:ajax event="rowEdit"
+							listener="#{administracaoUsuarioBean.onUserEdit}"
+							update=":form:msgs" />
+						<p:ajax event="rowEditCancel"
+							listener="#{administracaoUsuarioBean.onUserCancel}"
+							update=":form:msgs" />
+
+
+
+						<p:column headerText="#{msg.LabelName}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{user.NAME}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputNAME" value="#{user.NAME}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelUsuario}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{user.USNAME}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputUSNAME" value="#{user.USNAME}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelValidoDesde}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{user.GLTGV}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputGLTGV" value="#{user.GLTGV}"
+										style="width:100%">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelValidoAte}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{user.GLTGB}">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputGLTGB" value="#{user.GLTGB}"
+										style="width:100%">
+										<f:converter
+											converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelStatus}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{user.UFLAG}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputUFLAG" value="#{user.UFLAG}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:32px;text-align:center;"
+							headerText="#{msg.LabelEditar}">
+							<p:rowEditor />
+						</p:column>
+						<p:column headerText="#{msg.LabelContato}"
+							style="width:60px; text-align:center">
+							<p:commandLink update=":form:contactDetail"
+								oncomplete="PF('dlgContactDetail').show()">
+								<f:setPropertyActionListener value="#{user.USNAME}"
+									target="#{administracaoUsuarioBean.usName}" />
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/contactsIcon32.png"
+									title="#{msg.LabelContato}" width="16px" />
+							</p:commandLink>
+
+
+						</p:column>
+						<p:column headerText="#{msg.LabelProfile}"
+							style="width:50px; text-align:center">
+							<p:commandLink update=":form:profileDetail"
+								oncomplete="PF('dlgProfileDetail').show()">
+								<f:setPropertyActionListener value="#{user.USNAME}"
+									target="#{administracaoUsuarioBean.usName}" />
+								<img
+									src="#{facesContext.externalContext.requestContextPath}/static/images/profileIcon16.png"
+									title="#{msg.LabelProfile}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+					<div
+						style="text-align: right; width: 100%; background-color: transparent;">
+						<p:commandButton value="Novo Usuario"
+							onclick="PF('dlgUserNew').show()" />
+					</div>
+				</div>
+			</div>
+
+			<p:dialog id="dlgContactDetail" closeOnEscape="true"
+				header="#{msg.LabelContato}" widgetVar="dlgContactDetail"
+				width="940" height="500" modal="true">
+				<p:outputPanel id="contactDetail">
+					<p:outputLabel value="Novo" style="font-weight:bold" />
+					<p:panelGrid columns="5" styleClass="fieldPanel">
+						<p:outputLabel value="#{msg.LabelTelefone}"></p:outputLabel>
+						<p:outputLabel value="#{msg.LabelRamal}"></p:outputLabel>
+						<p:outputLabel value="#{msg.TPUSPTEL}"></p:outputLabel>
+						<p:outputLabel value="#{msg.LabelEMail}"></p:outputLabel>
+						<p:outputLabel></p:outputLabel>
+
+						<p:inputText styleClass="fieldInputTextShort"
+							value="#{administracaoUsuarioBean.contatoAlteracao.TELNUMBER}"></p:inputText>
+						<p:inputText styleClass="fieldInputTextShort"
+							value="#{administracaoUsuarioBean.contatoAlteracao.TELEXTENS}"></p:inputText>
+						<p:inputText styleClass="fieldInputTextShort"
+							value="#{administracaoUsuarioBean.contatoAlteracao.TPUSPTEL}"></p:inputText>
+						<p:inputText styleClass="fieldInputTextShort"
+							value="#{administracaoUsuarioBean.contatoAlteracao.SMTPADDR}"></p:inputText>
+						<p:commandLink
+							actionListener="#{administracaoUsuarioBean.onContactCreate}"
+							update="@form">
+							<img
+								src="#{facesContext.externalContext.requestContextPath}/static/images/CheckIcon24.png"
+								title="#{msg.LabelSalvar}" />
+						</p:commandLink>
+					</p:panelGrid>
+					<p:outputLabel value="Cadastrados" style="font-weight:bold" />
+					<p:dataTable id="tableContact" var="item" editable="true"
+						value="#{administracaoUsuarioBean.contacts}">
+
+						<p:ajax event="rowEdit"
+							listener="#{administracaoUsuarioBean.onContactEdit}"
+							update=":form:msgs" />
+						<p:ajax event="rowEditCancel"
+							listener="#{administracaoUsuarioBean.onContactCancel}"
+							update=":form:msgs" />
+
+						<p:column headerText="#{msg.LabelTelefone}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.TELNUMBER}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputTELNUMBER" value="#{item.TELNUMBER}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+
+						</p:column>
+						<p:column headerText="#{msg.LabelRamal}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.TELEXTENS}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputTELEXTENS" value="#{item.TELEXTENS}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelTPUSPTEL}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.TPUSPTEL}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputTPUSPTEL" value="#{item.TPUSPTEL}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg.LabelEMail}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.SMTPADDR}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputSMTPADDR" value="#{item.SMTPADDR}"
+										style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column style="width:32px">
+							<p:rowEditor />
+						</p:column>
+
+					</p:dataTable>
+
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="dlgUserNew" closeOnEscape="true"
+				header="#{msg.LabelNovo} #{msg.LabelUsuario}" widgetVar="dlgUserNew"
+				width="586" height="140" modal="true"
+				style="overflow-x: hidden; overflow-y: hidden;">
+				<p:outputPanel style="overflow-x: hidden; overflow-y: hidden;">
+					<p:panelGrid>
+						<f:facet name="header">
+							<p:row>
+								<p:column>#{msg.LabelName}</p:column>
+								<p:column>#{msg.LabelUsuario}</p:column>
+								<p:column>#{msg.LabelValidoDesde}</p:column>
+							</p:row>
+						</f:facet>
+
+
+						<p:row>
+							<p:column>
+								<p:inputText
+									value="#{administracaoUsuarioBean.userAlteracao.NAME}" />
+							</p:column>
+							<p:column>
+								<p:inputText
+									value="#{administracaoUsuarioBean.userAlteracao.USNAME}" />
+							</p:column>
+							<p:column>
+								<p:inputText
+									value="#{administracaoUsuarioBean.userAlteracao.GLTGV}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</p:inputText>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid>
+						<f:facet name="header">
+							<p:row>
+								<p:column>#{msg.LabelValidoAte}</p:column>
+								<p:column>#{msg.LabelStatus}</p:column>
+							</p:row>
+						</f:facet>
+
+						<p:row>
+							<p:column>
+								<p:inputText
+									value="#{administracaoUsuarioBean.userAlteracao.GLTGB}">
+									<f:converter
+										converterId="br.com.netshoes.nsPortFinanc.web.DateConverter" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:inputText
+									value="#{administracaoUsuarioBean.userAlteracao.UFLAG}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+					<p:commandButton value="Salvar"
+						actionListener="#{administracaoUsuarioBean.onUserCreate}"
+						update="@form" style="width:559px;" />
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog id="dlgProfileDetail" closeOnEscape="true"
+				header="#{msg.LabelProfile}" widgetVar="dlgProfileDetail"
+				width="240" height="200" modal="true">
+
+				<p:outputPanel id="profileDetail">
+					<p:dataTable id="tableProfile" var="item"
+						value="#{administracaoUsuarioBean.profiles}">
+						<p:column headerText="#{msg.LabelProfile}">
+							<p:outputLabel value="#{item.PROFILE}" />
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+	<ui:define name="footer">
+	</ui:define>
+</ui:composition>
+</html>
