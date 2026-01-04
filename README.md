@@ -1,5 +1,5 @@
 # NSPortalFinanceiroWeb
-Portal Financeiro para fornecedores, built to connect external partners (Netshoes/Nike) to the corporate financial engine. The project provides secure authentication, self-service user and supplier data, tracking of earlypayment requests, accounts payable visibility, communication channels, and exports driven by enterprise SOAP services.
+Portal Financeiro para fornecedores, built to connect external partners (Netshoes) to the corporate financial engine. The project provides secure authentication, self-service user and supplier data, tracking of earlypayment requests, accounts payable visibility, communication channels, and exports driven by enterprise SOAP services.
 
 ## Stack and architecture
 - **Web tier** - JSF 2.0/Facelets with PrimeFaces widgets and Bootstrap; templates such as `WebContent/templates/fiori.xhtml:1` and `WebContent/templates/master.xhtml:1` deliver a Fiori-inspired responsive shell with locale-aware scripts like `WebContent/static/js/portal.js:1`.
